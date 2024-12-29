@@ -17,6 +17,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    public boolean authenticate(String username, String password) {
+        // Replace this with actual authentication logic (e.g., database check)
+        return "admin".equals(username) && "password".equals(password);
+    }
+
     public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
