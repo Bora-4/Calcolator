@@ -17,7 +17,7 @@ public class UserMapper {
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setRole(UserEntity.Role.valueOf(userDTO.getRole().toUpperCase()));
+        user.setRole(UserEntity.Role.valueOf(userDTO.getRole()));
         user.setPassword(userDTO.getPassword());
 
         return user;
