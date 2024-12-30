@@ -27,17 +27,6 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     }
 
     @Override
-    public FoodEntryEntity findByName(String foodName) {
-        try {
-           return em.createQuery("SELECT f FROM FoodEntryEntity f WHERE f.foodName = :foodName", FoodEntryEntity.class)
-                   .setParameter("foodName", foodName)
-                   .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    @Override
     public List<FoodEntryEntity> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             return em.createQuery(

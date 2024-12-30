@@ -10,7 +10,6 @@ import java.util.List;
 public interface FoodEntryRepository {
     void save(FoodEntryEntity foodEntry);
     FoodEntryEntity findById(Long id);
-    FoodEntryEntity findByName(String foodName);
     List<FoodEntryEntity> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate);
     List<FoodEntryEntity> findFoodEntriesLast7Days();
     Long countFoodEntriesLast7Days();
