@@ -19,13 +19,45 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO){
+        if (!userService.validateEmail(userDTO.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+        }
+        if (!userService.validateUsername(userDTO.getName())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
+        }
+        if (!userService.validatePassword(userDTO.getPassword())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Password not valid.");
+        }
         userService.save(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
     }
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody UserDTO userDTO){
-        userService.update(userDTO);
+        UserDTO existingUser = userService.findById(userDTO.getId());
+        if (existingUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+
+        if (userDTO.getName() != null) {
+            if (!userService.validateUsername(userDTO.getName())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
+            }
+            existingUser.setName(userDTO.getName());
+        }
+        if (userDTO.getEmail() != null) {
+            if (!userService.validateEmail(userDTO.getEmail())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+            }
+            existingUser.setEmail(userDTO.getEmail());
+        }
+        if (userDTO.getPassword() != null) {
+            if (!userService.validatePassword(userDTO.getPassword())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Password not valid.");
+            }
+            existingUser.setPassword(userDTO.getPassword());
+        }
+        userService.update(existingUser);
         return ResponseEntity.ok("User updated successfully.");
     }
 
@@ -52,4 +84,20 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.ok("User deleted successfully.");
     }
+
+    @GetMapping("validate/username/{username}")
+    public ResponseEntity<Boolean> validateUsername(@PathVariable("username") String username) {
+        return ResponseEntity.ok(userService.validateUsername(username));
+    }
+
+    @GetMapping("validate/email/{email}")
+    public ResponseEntity<Boolean> validateEmail(@PathVariable("email") String email) {
+        return ResponseEntity.ok(userService.validateEmail(email));
+    }
+
+    @GetMapping("validate/password/{password}")
+    public ResponseEntity<Boolean> validatePassword(@PathVariable("password") String password) {
+        return ResponseEntity.ok(userService.validatePassword(password));
+    }
+
 }

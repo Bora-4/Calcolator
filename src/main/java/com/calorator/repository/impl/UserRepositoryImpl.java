@@ -3,11 +3,13 @@ package com.calorator.repository.impl;
 import com.calorator.entity.UserEntity;
 import com.calorator.repository.UserRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -52,5 +54,33 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void delete(Long id) {
         em.remove(findById(id));
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        try {
+            UserEntity user = em.createQuery("SELECT u FROM UserEntity u WHERE u.email = :email", UserEntity.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while fetching user by email", e);
+        }
+    }
+
+    @Override
+    public Optional<UserEntity> findByUserName(String username) {
+        try {
+            UserEntity user = em.createQuery("SELECT u FROM UserEntity u WHERE u.name = :name", UserEntity.class)
+                    .setParameter("name", username)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while fetching user by username", e);
+        }
     }
 }

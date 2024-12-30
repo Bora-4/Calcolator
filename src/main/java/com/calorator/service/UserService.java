@@ -11,4 +11,8 @@ public interface UserService {
     void update(UserDTO userDTO);
     List<UserDTO> findAll();
     void delete(Long id);
+    boolean validateUsername(String username);
+    boolean validateEmail(String email);
+    boolean validatePassword(String password);
+
 }

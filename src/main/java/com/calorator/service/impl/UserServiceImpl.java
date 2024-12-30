@@ -7,6 +7,7 @@ import com.calorator.repository.UserRepository;
 import com.calorator.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private final UserRepository userRepository;
 
     public boolean authenticate(String username, String password) {
@@ -74,5 +76,21 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("User with id " + id + "was not found.");
         }
         userRepository.delete(id);
+    }
+
+    @Override
+    public boolean validateEmail(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
+    @Override
+    public boolean validatePassword(String password) {
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9]).{8,}$";
+        return password.matches(passwordPattern);
+    }
+
+    @Override
+    public boolean validateUsername(String username) {
+        return userRepository.findByUserName(username).isEmpty();
     }
 }
