@@ -28,9 +28,9 @@ public class UserEntity implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, columnDefinition = "ENUM('user', 'admin') DEFAULT 'user'")
-    private Role role = Role.USER;
+    private Role role;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -63,8 +63,8 @@ public class UserEntity implements Serializable {
     }
 
     public enum Role{
-        USER,
-        ADMIN
+        user,
+        admin
     }
 
     public Long getId() {
