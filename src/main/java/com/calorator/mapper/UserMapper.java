@@ -18,6 +18,7 @@ public class UserMapper {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setRole(UserEntity.Role.valueOf(userDTO.getRole().toUpperCase()));
+        user.setPassword(userDTO.getPassword());
 
         return user;
     }
@@ -32,6 +33,7 @@ public class UserMapper {
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
         userDTO.setRole(user.getRole().name());
+        userDTO.setPassword(user.getPassword());
 
         return userDTO;
     }
