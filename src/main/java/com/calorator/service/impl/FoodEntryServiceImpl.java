@@ -8,11 +8,15 @@ import com.calorator.repository.FoodEntryRepository;
 import com.calorator.repository.UserRepository;
 import com.calorator.service.FoodEntryService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional
 public class FoodEntryServiceImpl implements FoodEntryService {
 
     private final FoodEntryRepository foodEntryRepository;
