@@ -19,13 +19,13 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO){
-        if (!userService.validateEmail(userDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+        if (!userService.isUsernameValid(userDTO.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email not valid.");
         }
-        if (!userService.validateUsername(userDTO.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
+        if (!userService.isUsernameValid(userDTO.getName())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username not valid.");
         }
-        if (!userService.validatePassword(userDTO.getPassword())) {
+        if (!userService.isPasswordValid(userDTO.getPassword())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Password not valid.");
         }
         userService.save(userDTO);
@@ -38,21 +38,20 @@ public class UserController {
         if (existingUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
-
         if (userDTO.getName() != null) {
-            if (!userService.validateUsername(userDTO.getName())) {
+            if (!userService.isUsernameValid(userDTO.getName())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
             }
             existingUser.setName(userDTO.getName());
         }
         if (userDTO.getEmail() != null) {
-            if (!userService.validateEmail(userDTO.getEmail())) {
+            if (!userService.isEmailValid(userDTO.getEmail())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
             }
             existingUser.setEmail(userDTO.getEmail());
         }
         if (userDTO.getPassword() != null) {
-            if (!userService.validatePassword(userDTO.getPassword())) {
+            if (!userService.isPasswordValid(userDTO.getPassword())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Password not valid.");
             }
             existingUser.setPassword(userDTO.getPassword());

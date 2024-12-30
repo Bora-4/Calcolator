@@ -83,4 +83,18 @@ public class UserRepositoryImpl implements UserRepository {
             throw new RuntimeException("Error while fetching user by username", e);
         }
     }
+
+    @Override
+    public Optional<UserEntity> findByPassword(String password) {
+        try {
+            UserEntity user = em.createQuery("SELECT u FROM UserEntity u WHERE u.password = :password", UserEntity.class)
+                    .setParameter("password", password)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while fetching user by username", e);
+        }
+    }
 }

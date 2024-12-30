@@ -79,18 +79,50 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean validateEmail(String email) {
-        return userRepository.findByEmail(email).isEmpty();
+    public boolean isEmailValid(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            return false;
+        }
+        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        return email.matches(emailPattern);
     }
 
     @Override
-    public boolean validatePassword(String password) {
+    public boolean isPasswordValid(String password) {
         String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9]).{8,}$";
         return password.matches(passwordPattern);
     }
 
     @Override
+    public boolean isUsernameValid(String username) {
+        if (userRepository.findByUserName(username).isPresent()) {
+            return false;
+        }
+        String usernamePattern = "^[a-zA-Z0-9_-]{3,15}$";
+        return usernamePattern.matches(username);
+    }
+
+    @Override
+    public boolean validateEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean validatePassword(String password) {
+        if (userRepository.findByPassword(password).isPresent()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean validateUsername(String username) {
-        return userRepository.findByUserName(username).isEmpty();
+        if (userRepository.findByUserName(username).isPresent()) {
+            return true;
+        }
+        return false;
     }
 }

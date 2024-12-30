@@ -14,5 +14,8 @@ public interface UserService {
     boolean validateUsername(String username);
     boolean validateEmail(String email);
     boolean validatePassword(String password);
+    boolean isEmailValid(String email);
+    boolean isPasswordValid(String password);
+    boolean isUsernameValid(String username);
 
 }
