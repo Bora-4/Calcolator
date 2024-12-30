@@ -4,7 +4,6 @@ import com.calorator.entity.UserEntity;
 import com.calorator.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +13,6 @@ public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
     EntityManager em;
 
-    @Transactional
     @Override
     public void save(UserEntity userEntity) {
         em.persist(userEntity);
@@ -36,7 +34,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    @Transactional
     @Override
     public void update(UserEntity userEntity) {
         em.merge(userEntity);
@@ -48,7 +45,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .getResultList();
     }
 
-    @Transactional
     @Override
     public void delete(Long id) {
         em.remove(findById(id));
