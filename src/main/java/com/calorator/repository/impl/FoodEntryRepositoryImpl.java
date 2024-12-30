@@ -3,7 +3,6 @@ package com.calorator.repository.impl;
 import com.calorator.entity.FoodEntryEntity;
 import com.calorator.repository.FoodEntryRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
