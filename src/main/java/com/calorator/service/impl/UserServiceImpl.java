@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,13 +20,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserRepository userRepository;
 
-    public boolean authenticate(String username, String password) {
-        // Replace this with actual authentication logic (e.g., database check)
-        return "admin".equals(username) && "password".equals(password);
+    public UserServiceImpl(UserRepository userRepository){
+
+        this.userRepository = userRepository;
     }
 
-    public UserServiceImpl(UserRepository userRepository){
-        this.userRepository = userRepository;
+    public boolean authenticate(String username, String password) {
+        Optional<UserEntity> user = userRepository.findByUserName(username);
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
+            return true;
+        }
+        return false;
     }
 
     @Override

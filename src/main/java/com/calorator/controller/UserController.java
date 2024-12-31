@@ -17,6 +17,14 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<String> authenticateUser(@RequestBody UserDTO userDTO){
+        if (userService.authenticate(userDTO.getEmail(), userDTO.getPassword())) {
+            return ResponseEntity.ok("Login successful.");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+    }
+
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO){
         if (!userService.isUsernameValid(userDTO.getEmail())) {
@@ -83,20 +91,4 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.ok("User deleted successfully.");
     }
-
-    @GetMapping("validate/username/{username}")
-    public ResponseEntity<Boolean> validateUsername(@PathVariable("username") String username) {
-        return ResponseEntity.ok(userService.validateUsername(username));
-    }
-
-    @GetMapping("validate/email/{email}")
-    public ResponseEntity<Boolean> validateEmail(@PathVariable("email") String email) {
-        return ResponseEntity.ok(userService.validateEmail(email));
-    }
-
-    @GetMapping("validate/password/{password}")
-    public ResponseEntity<Boolean> validatePassword(@PathVariable("password") String password) {
-        return ResponseEntity.ok(userService.validatePassword(password));
-    }
-
 }
