@@ -25,6 +25,7 @@ public class SignupController {
         userDTO.setName(name);
         userDTO.setEmail(email);
         userDTO.setPassword(password);
+        userDTO.setRole("user");
         userService.save(userDTO);
         return "redirect:/login";
     }
