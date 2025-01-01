@@ -84,27 +84,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isEmailValid(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            return false;
+    public void isEmailValid(String email) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty.");
         }
         String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        return email.matches(emailPattern);
+        if (!email.matches(emailPattern)) {
+            throw new IllegalArgumentException("Invalid email format.");
+        }
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalStateException("Email already exists.");
+        }
     }
 
     @Override
-    public boolean isPasswordValid(String password) {
+    public void isPasswordValid(String password) {
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty.");
+        }
         String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9]).{8,}$";
-        return password.matches(passwordPattern);
+        if (!password.matches(passwordPattern)) {
+            throw new IllegalArgumentException("Invalid password format.");
+        }
     }
 
     @Override
-    public boolean isUsernameValid(String username) {
-        if (userRepository.findByUserName(username).isPresent()) {
-            return false;
+    public void isUsernameValid(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty.");
         }
         String usernamePattern = "^[a-zA-Z0-9_-]{3,15}$";
-        return usernamePattern.matches(username);
+        if (!username.matches(usernamePattern)) {
+            throw new IllegalArgumentException("Invalid username format.");
+        }
+        if (userRepository.findByUserName(username).isPresent()) {
+            throw new IllegalStateException("Username already exists.");
+        }
     }
 
     @Override
