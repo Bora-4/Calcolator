@@ -4,7 +4,12 @@
     <title>Home</title>
 </head>
 <body>
-<h1>Welcome, <span th:text="${session.user}">User</span>!</h1>
+<main class="home">
+  <h1>Welcome to Calolator</h1>
+  <button class="button" data-navigate="login">Sign In</button>
+  <button class="button" data-navigate="signup">Sign Up</button>
+</main>
 <a href="/logout">Logout</a>
+<script src="scriptcal.js"></script>
 </body>
 </html>
