@@ -20,9 +20,10 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-        if (userService.authenticate(username, password)) {
-            session.setAttribute("user", username);
+    public String login(@RequestParam("name") String name, @RequestParam("password") String password, HttpSession session) {
+        if (userService.authenticate(name, password)) {
+            session.setAttribute("user", name);
+            session.setMaxInactiveInterval(30 * 60);
             return "redirect:/home";
         }
         return "redirect:/login?error=true";
