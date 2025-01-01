@@ -11,4 +11,12 @@ public interface UserService {
     void update(UserDTO userDTO);
     List<UserDTO> findAll();
     void delete(Long id);
+    boolean validateUsername(String username);
+    boolean validateEmail(String email);
+    boolean validatePassword(String password);
+    boolean isEmailValid(String email);
+    boolean isPasswordValid(String password);
+    boolean isUsernameValid(String username);
+    boolean authenticate(String username, String password);
+
 }
