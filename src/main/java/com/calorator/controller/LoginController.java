@@ -20,7 +20,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String name, @RequestParam String password, HttpSession session) {
+    public String login(@RequestParam("name") String name, @RequestParam("password") String password, HttpSession session) {
         if (userService.authenticate(name, password)) {
             session.setAttribute("user", name);
             session.setMaxInactiveInterval(30 * 60);
