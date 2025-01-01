@@ -18,4 +18,6 @@ public interface FoodEntryService {
     public List<FoodEntryDTO> findAll();
 
     public void delete(Long id);
+
+    public void validateFoodEntry(FoodEntryDTO foodEntryDTO);
 }

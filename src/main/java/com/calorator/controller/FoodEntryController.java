@@ -20,8 +20,13 @@ public class FoodEntryController {
     // Save a food entry
     @PostMapping
     public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO) {
-        foodEntryService.save(foodEntryDTO);
-        return ResponseEntity.ok("Food entry saved successfully.");
+        try {
+            foodEntryService.validateFoodEntry(foodEntryDTO);
+            foodEntryService.save(foodEntryDTO);
+            return ResponseEntity.ok("Food entry saved successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // Find food entry by ID
@@ -45,6 +50,11 @@ public class FoodEntryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateFoodEntry(@PathVariable Long id, @RequestBody FoodEntryDTO foodEntryDTO) {
+        try {
+            foodEntryService.validateFoodEntry(foodEntryDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         foodEntryDTO.setId(id);
         foodEntryService.update(foodEntryDTO);
         return ResponseEntity.ok("Food entry updated successfully.");

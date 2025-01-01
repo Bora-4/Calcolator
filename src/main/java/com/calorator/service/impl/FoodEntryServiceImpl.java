@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,4 +106,31 @@ public class FoodEntryServiceImpl implements FoodEntryService {
         }
         foodEntryRepository.delete(id);
     }
+
+    @Override
+    public void validateFoodEntry(FoodEntryDTO foodEntryDTO) {
+        if (foodEntryDTO == null) {
+            throw new IllegalArgumentException("FoodEntryDTO must not be null.");
+        }
+
+        String foodName = foodEntryDTO.getFoodName();
+        int calories = foodEntryDTO.getCalories();
+        LocalDateTime entryDate = foodEntryDTO.getEntryDate();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (foodName == null || foodName.isEmpty()) {
+            throw new IllegalArgumentException("Food name must not be empty.");
+        }
+
+        if (calories <= 0) {
+            throw new IllegalArgumentException("Calories must be greater than 0.");
+        }
+
+        if (entryDate == null || entryDate.isAfter(now)) {
+            throw new IllegalArgumentException("Entry date must be in the past.");
+        }
+
+    }
+
+
 }
