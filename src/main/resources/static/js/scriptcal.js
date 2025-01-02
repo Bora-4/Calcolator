@@ -2,9 +2,9 @@ class NavigationManager {
     constructor() {
         // Define available pages
         this.pages = {
-            home: "home.html",
-            login: "login.html",
-            signup: "signup.html",
+            home: "/home",
+            login: "/login",
+            signup: "/signup",
         };
     }
 
