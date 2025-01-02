@@ -20,8 +20,11 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("name") String name, @RequestParam("password") String password, HttpSession session) {
-        if (userService.authenticate(name, password)) {
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
+        if (userService.authenticate(email, password)) {
+            Long userId = userService.findByEmail(email).getId();
+            String name = userService.findByEmail(email).getName();
+            session.setAttribute("userId", userId);
             session.setAttribute("user", name);
             session.setMaxInactiveInterval(30 * 60);
             return "redirect:/dashboard";
@@ -31,7 +34,7 @@ public class LoginController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session) {
-        if (session.getAttribute("user") == null) {
+        if (session.getAttribute("userId") == null) {
             return "redirect:/login";
         }
         return "dashboard";

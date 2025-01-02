@@ -8,6 +8,8 @@ public interface UserService {
     void save(UserDTO userDTO);
     UserDTO findById(Long id);
     UserDTO findByName(String name);
+    UserDTO findByEmail(String email);
+
     void update(UserDTO userDTO);
     List<UserDTO> findAll();
     void delete(Long id);

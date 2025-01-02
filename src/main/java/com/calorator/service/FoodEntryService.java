@@ -1,6 +1,8 @@
 package com.calorator.service;
 
 import com.calorator.dto.FoodEntryDTO;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FoodEntryService {
@@ -18,4 +20,6 @@ public interface FoodEntryService {
     public List<FoodEntryDTO> findAll();
 
     public void delete(Long id);
+
+    List<FoodEntryDTO> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -3,11 +3,15 @@ package com.calorator.controller;
 
 import com.calorator.dto.FoodEntryDTO;
 import com.calorator.service.FoodEntryService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/food-entries")
 public class FoodEntryController {
 
@@ -56,9 +60,29 @@ public class FoodEntryController {
         return ResponseEntity.ok(foodEntries);
     }
 
+    @GetMapping("/view")
+    public String entryPage(){
+        return "food-entries";
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFoodEntry(@PathVariable Long id) {
         foodEntryService.delete(id);
         return ResponseEntity.ok("Food entry deleted successfully.");
+    }
+
+    @GetMapping("/filter-by-date")
+    public ResponseEntity<List<FoodEntryDTO>> getEntriesByDateInterval(
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(401).build(); // User is not logged in
+        }
+        LocalDateTime start = LocalDateTime.parse(startDate);
+        LocalDateTime end = LocalDateTime.parse(endDate);
+        List<FoodEntryDTO> foodEntries = foodEntryService.entryDateFiltering(userId, start, end);
+        return ResponseEntity.ok(foodEntries);
     }
 }

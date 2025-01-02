@@ -32,53 +32,47 @@ class NavigationManager {
         const logInForm = document.querySelector(".login form");
         if (logInForm) {
             logInForm.addEventListener("submit", (event) => {
-                event.preventDefault();
                 const email = logInForm.querySelector("input[type='email']").value.trim();
                 const password = logInForm.querySelector("input[type='password']").value.trim();
 
                 if (!this.validateEmail(email)) {
+                    event.preventDefault(); // Stop form submission only if validation fails
                     alert("Please enter a valid email address.");
                     return;
                 }
                 if (!password) {
+                    event.preventDefault(); // Stop form submission only if validation fails
                     alert("Password is required.");
-                    return;
+
                 }
-
-                alert("Sign In successful!");
-
             });
+
         }
 
 
         const signUpForm = document.querySelector(".signup form");
         if (signUpForm) {
             signUpForm.addEventListener("submit", (event) => {
-                event.preventDefault();
-                const firstName = signUpForm.querySelector("input[placeholder='First Name']").value.trim();
-                const lastName = signUpForm.querySelector("input[placeholder='Last Name']").value.trim();
-                const email = signUpForm.querySelector("input[type='email']").value.trim();
-                const password = signUpForm.querySelector("input[type='password']").value.trim();
+                const username = signUpForm.querySelector("input[name='username']").value.trim();
+                const email = signUpForm.querySelector("input[name='email']").value.trim();
+                const password = signUpForm.querySelector("input[name='password']").value.trim();
 
-                if (!firstName) {
-                    alert("First Name is required.");
-                    return;
-                }
-                if (!lastName) {
-                    alert("Last Name is required.");
+                if (!username) {
+                    event.preventDefault(); // Prevent submission if validation fails
+                    alert("Username is required.");
                     return;
                 }
                 if (!this.validateEmail(email)) {
+                    event.preventDefault(); // Prevent submission if validation fails
                     alert("Please enter a valid email address.");
                     return;
                 }
                 if (!password) {
+                    event.preventDefault(); // Prevent submission if validation fails
                     alert("Password is required.");
-                    return;
+
                 }
-
-                alert("Sign Up successful!");
-
+                // Allow submission if validation passes
             });
         }
     }

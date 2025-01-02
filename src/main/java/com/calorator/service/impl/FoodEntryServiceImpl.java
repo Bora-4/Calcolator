@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,5 +105,17 @@ public class FoodEntryServiceImpl implements FoodEntryService {
             throw new EntityNotFoundException("Food entry with id " + id + " was not found.");
         }
         foodEntryRepository.delete(id);
+    }
+
+    @Override
+    public List<FoodEntryDTO> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        if (userId == null || startDate == null || endDate == null) {
+            throw new IllegalArgumentException("userId, startDate and endDate must not be null.");
+        }
+
+        List<FoodEntryEntity> foodEntries = foodEntryRepository.entryDateFiltering(userId, startDate, endDate);
+        return foodEntries.stream()
+                .map(FoodEntryMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
