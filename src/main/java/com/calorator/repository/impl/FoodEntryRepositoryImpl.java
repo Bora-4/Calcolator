@@ -70,4 +70,20 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     public void delete(Long id) {
         em.remove(findById(id));
     }
+
+    @Override
+    public List<FoodEntryEntity> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        try {
+            return em.createQuery(
+                            "SELECT f FROM FoodEntryEntity f WHERE f.user.id = :userId AND f.entryDate BETWEEN :startDate AND :endDate",
+                            FoodEntryEntity.class
+                    )
+                    .setParameter("userId", userId)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while fetching food entries by date interval.", e);
+        }
+    }
 }
