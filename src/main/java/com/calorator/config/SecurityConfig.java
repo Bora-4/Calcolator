@@ -13,8 +13,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/signup", "/login", "/home", "/users/**", "/css/**", "/js/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf.disable()) // Optional: Disable CSRF if needed
                 .httpBasic(httpBasic -> httpBasic.disable()); // Disable basic auth if not needed
