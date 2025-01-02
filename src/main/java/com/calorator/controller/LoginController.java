@@ -24,22 +24,27 @@ public class LoginController {
         if (userService.authenticate(name, password)) {
             session.setAttribute("user", name);
             session.setMaxInactiveInterval(30 * 60);
-            return "redirect:/home";
+            return "redirect:/dashboard";
         }
         return "redirect:/login?error=true";
     }
 
-    @GetMapping("/home")
-    public String home(HttpSession session) {
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session) {
         if (session.getAttribute("user") == null) {
             return "redirect:/login";
         }
-        return "home";
+        return "dashboard";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/home";
+    }
+
+    @GetMapping("/home")
+    public String homePage() {
+        return "home";
     }
 }
