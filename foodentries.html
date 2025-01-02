@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #FF9F00;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #A4D400;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-container input,
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1.1rem;
+        }
+
+        .form-container input[type="number"],
+        .form-container input[type="text"],
+        .form-container input[type="datetime-local"] {
+            background-color: #f4f7fc;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container input:focus {
+            background-color: #e0eaff;
+            outline: none;
+        }
+
+        .form-container button {
+            background-color: #FF6F61;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #ff4c39;
+        }
+
+        .confirmation {
+            margin-top: 20px;
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border: 1px solid #d0e9c6;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .error-message {
+            margin-top: 20px;
+            background-color: #f2dede;
+            color: #a94442;
+            padding: 15px;
+            border: 1px solid #ebccd1;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+
+        .form-container,
+        h1 {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .form-container:hover,
+        h1:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+<h1>Calorie Tracker</h1>
+<div class="form-container">
+    <form id="foodForm">
+        <label for="foodName"></label><input type="text" id="foodName" placeholder="Food Name" required />
+        <label for="calories"></label><input type="number" id="calories" placeholder="Calories" required />
+        <label for="timestamp"></label><input type="datetime-local" id="timestamp" required />
+        <button type="submit">Add Food Entry</button>
+    </form>
+    <div class="confirmation" id="confirmationMessage">
+        Food entry added successfully!
+    </div>
+    <div class="error-message" id="errorMessage">
+        Error submitting food entry! Please try again.
+    </div>
+</div>
+
+<script>
+    document.getElementById("foodForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const foodName = document.getElementById("foodName").value;
+        const calories = document.getElementById("calories").value;
+        const timestamp = document.getElementById("timestamp").value;
+
+        const isValid = validateFoodEntry(foodName, calories, timestamp);
+        if (!isValid) {
+            alert("Please fill out the form correctly!");
+            return;
+        }
+
+        const response = await fetch("/api/food-entry", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ foodName, calories, timestamp }),
+        });
+
+        if (response.ok) {
+            document.getElementById("confirmationMessage").style.display = "block";
+            document.getElementById("errorMessage").style.display = "none";
+            document.getElementById("foodForm").reset();
+        } else {
+            document.getElementById("errorMessage").style.display = "block";
+            document.getElementById("confirmationMessage").style.display = "none";
+        }
+    });
+
+    function validateFoodEntry(name, calories, timestamp) {
+        return !(!name || !timestamp || isNaN(calories) || calories <= 0);
+    }
+</script>
+</body>
+</html>
