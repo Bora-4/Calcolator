@@ -3,6 +3,7 @@ package com.calorator.controller;
 
 import com.calorator.dto.FoodEntryDTO;
 import com.calorator.dto.UserDTO;
+import com.calorator.service.CalorieTotalService;
 import com.calorator.service.FoodEntryService;
 import com.calorator.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -19,36 +21,32 @@ public class FoodEntryController {
 
     private final FoodEntryService foodEntryService;
     private final UserService userService;
+    private final CalorieTotalService calorieTotalService;
 
-    public FoodEntryController(FoodEntryService foodEntryService, UserService userService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserService userService, CalorieTotalService calorieTotalService) {
         this.foodEntryService = foodEntryService;
         this.userService = userService;
+        this.calorieTotalService = calorieTotalService;
     }
 
-    @PostMapping("/save-food-entry")
+    @PostMapping("/save")
     public ResponseEntity<String> saveFoodEntry(
             HttpSession session,
-            @RequestParam(name = "foodName") String foodName,
-            @RequestParam(name = "calories") Integer calories,
-            @RequestParam(name = "price") Double price) {
+            @RequestBody FoodEntryDTO entry) {
 
-        long userId = (int) session.getAttribute("userId");
+        int userId = (int) session.getAttribute("userId");
         UserDTO user = userService.findById(userId);
 
-
-        FoodEntryDTO entry = new FoodEntryDTO();
         entry.setUser(user);
-        entry.setFoodName(foodName);
-        entry.setCalories(calories);
-        entry.setPrice(price);
-
+        entry.setEntryDate(LocalDateTime.now());
+        calorieTotalService.updateTotalCalories(userId, entry.getCalories(), new Date());
         foodEntryService.save(entry);
         return ResponseEntity.ok("Food entry saved successfully.");
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<FoodEntryDTO> findFoodEntryById(@PathVariable Long id) {
+    public ResponseEntity<FoodEntryDTO> findFoodEntryById(@PathVariable int id) {
         FoodEntryDTO foodEntryDTO = foodEntryService.findById(id);
         return ResponseEntity.ok(foodEntryDTO);
     }
@@ -60,13 +58,13 @@ public class FoodEntryController {
     }
 
     @GetMapping("/last-7-days/count")
-    public ResponseEntity<Long> getLast7DaysEntriesCount() {
-        Long count = foodEntryService.countFoodEntriesLast7Days();
+    public ResponseEntity<Integer> getLast7DaysEntriesCount() {
+        int count = foodEntryService.countFoodEntriesLast7Days();
         return ResponseEntity.ok(count);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateFoodEntry(@PathVariable Long id, @RequestBody FoodEntryDTO foodEntryDTO) {
+    public ResponseEntity<String> updateFoodEntry(@PathVariable int id, @RequestBody FoodEntryDTO foodEntryDTO) {
         foodEntryDTO.setId(id);
         foodEntryService.update(foodEntryDTO);
         return ResponseEntity.ok("Food entry updated successfully.");
@@ -78,13 +76,8 @@ public class FoodEntryController {
         return ResponseEntity.ok(foodEntries);
     }
 
-    @GetMapping("/view")
-    public String entryPage(){
-        return "food-entries";
-    }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteFoodEntry(@PathVariable Long id) {
+    public ResponseEntity<String> deleteFoodEntry(@PathVariable int id) {
         foodEntryService.delete(id);
         return ResponseEntity.ok("Food entry deleted successfully.");
     }
@@ -94,8 +87,8 @@ public class FoodEntryController {
             @RequestParam String startDate,
             @RequestParam String endDate,
             HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
+        int userId = (int) session.getAttribute("userId");
+        if (userId == 0) {
             return ResponseEntity.status(401).build(); // User is not logged in
         }
         LocalDateTime start = LocalDateTime.parse(startDate);
