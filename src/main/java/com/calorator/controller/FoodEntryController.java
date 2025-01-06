@@ -2,7 +2,9 @@ package com.calorator.controller;
 
 
 import com.calorator.dto.FoodEntryDTO;
+import com.calorator.dto.UserDTO;
 import com.calorator.service.FoodEntryService;
+import com.calorator.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,19 +18,35 @@ import java.util.List;
 public class FoodEntryController {
 
     private final FoodEntryService foodEntryService;
+    private final UserService userService;
 
-    public FoodEntryController(FoodEntryService foodEntryService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserService userService) {
         this.foodEntryService = foodEntryService;
+        this.userService = userService;
     }
 
-    // Save a food entry
-    @PostMapping
-    public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO) {
-        foodEntryService.save(foodEntryDTO);
+    @PostMapping("/save-food-entry")
+    public ResponseEntity<String> saveFoodEntry(
+            HttpSession session,
+            @RequestParam(name = "foodName") String foodName,
+            @RequestParam(name = "calories") Integer calories,
+            @RequestParam(name = "price") Double price) {
+
+        long userId = (int) session.getAttribute("userId");
+        UserDTO user = userService.findById(userId);
+
+
+        FoodEntryDTO entry = new FoodEntryDTO();
+        entry.setUser(user);
+        entry.setFoodName(foodName);
+        entry.setCalories(calories);
+        entry.setPrice(price);
+
+        foodEntryService.save(entry);
         return ResponseEntity.ok("Food entry saved successfully.");
     }
 
-    // Find food entry by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<FoodEntryDTO> findFoodEntryById(@PathVariable Long id) {
         FoodEntryDTO foodEntryDTO = foodEntryService.findById(id);
