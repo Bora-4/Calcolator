@@ -31,4 +31,22 @@ public class CalorieTotalServiceImpl implements CalorieTotalService {
         total = calorieTotalRepository.save(total);
         return calorieTotalMapper.toDTO(total);
     }
+
+    @Override
+    public void updateTotalCalories(int userId, int calories, Date date) {
+
+        CalorieTotalEntity total = calorieTotalRepository.findByUserIdAndDate(userId, date);
+        if(total == null){
+            total = new CalorieTotalEntity();
+            total.setUserId(userId);
+            total.setDate(new Date());
+            total.setTotalCalories(calories);
+        }
+        else {
+            total.setTotalCalories(total.getTotalCalories() + calories);
+        }
+        calorieTotalRepository.save(total);
+    }
+
+
 }

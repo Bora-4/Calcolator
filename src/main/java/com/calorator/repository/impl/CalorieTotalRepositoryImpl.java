@@ -2,6 +2,7 @@ package com.calorator.repository.impl;
 
 import com.calorator.entity.CalorieTotalEntity;
 import com.calorator.repository.CalorieTotalRepository;
+import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -17,10 +18,14 @@ public class CalorieTotalRepositoryImpl implements CalorieTotalRepository {
 
     @Override
     public CalorieTotalEntity findByUserIdAndDate(int userId, Date date) {
-        return entityManager.createQuery("FROM CalorieTotalEntity WHERE userId = :userId AND date = :date", CalorieTotalEntity.class)
-                .setParameter("userId", userId)
-                .setParameter("date", date)
-                .getSingleResult();
+        try {
+            return entityManager.createQuery("FROM CalorieTotalEntity WHERE userId = :userId AND date = :date", CalorieTotalEntity.class)
+                    .setParameter("userId", userId)
+                    .setParameter("date", date)
+                    .getSingleResult();
+        }catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
