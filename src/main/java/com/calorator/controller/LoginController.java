@@ -22,7 +22,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
         if (userService.authenticate(email, password)) {
-            Long userId = userService.findByEmail(email).getId();
+            int userId = userService.findByEmail(email).getId();
             String name = userService.findByEmail(email).getName();
             session.setAttribute("userId", userId);
             session.setAttribute("user", name);
