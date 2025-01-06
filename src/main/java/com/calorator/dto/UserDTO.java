@@ -13,6 +13,7 @@ public class UserDTO {
     private String email;
     private String role;
     private String password;
+    private int calorie_threshold;
 
     public Long getId() {
         return id;
@@ -34,6 +35,10 @@ public class UserDTO {
         return email;
     }
 
+    public int getCalorie_threshold() {
+        return calorie_threshold;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -52,5 +57,9 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setCalorie_threshold(int calorie_threshold) {
+        this.calorie_threshold = calorie_threshold;
     }
 }

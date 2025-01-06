@@ -38,6 +38,9 @@ public class UserEntity implements Serializable {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "calorie_threshold")
+    private int calorie_threshold;
+
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -46,6 +49,7 @@ public class UserEntity implements Serializable {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
+                ", calorieThreshold=" + calorie_threshold +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
@@ -122,4 +126,7 @@ public class UserEntity implements Serializable {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public int getCalorie_threshold() { return calorie_threshold; }
+    public void setCalorie_threshold(int calorie_threshold) { this.calorie_threshold = calorie_threshold; }
 }

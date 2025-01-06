@@ -19,6 +19,7 @@ public class UserMapper {
         user.setEmail(userDTO.getEmail());
         user.setRole(UserEntity.Role.valueOf(userDTO.getRole()));
         user.setPassword(userDTO.getPassword());
+        user.setCalorie_threshold(userDTO.getCalorie_threshold());
 
         return user;
     }
@@ -34,6 +35,7 @@ public class UserMapper {
         userDTO.setEmail(user.getEmail());
         userDTO.setRole(user.getRole().name());
         userDTO.setPassword(user.getPassword());
+        userDTO.setCalorie_threshold(user.getCalorie_threshold());
 
         return userDTO;
     }

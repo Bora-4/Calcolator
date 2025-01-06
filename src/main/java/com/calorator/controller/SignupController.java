@@ -26,6 +26,7 @@ public class SignupController {
         userDTO.setEmail(email);
         userDTO.setPassword(password);
         userDTO.setRole("user");
+        userDTO.setCalorie_threshold(2500);
         userService.save(userDTO);
         return "redirect:/login";
     }
