@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserEntity findById(Long id) {
+    public UserEntity findById(int id) {
         return em.find(UserEntity.class, id);
     }
 
@@ -52,7 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Transactional
     @Override
-    public void delete(Long id) {
+    public void delete(int id) {
         em.remove(findById(id));
     }
 

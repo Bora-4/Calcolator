@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class FoodEntryDTO {
-    private Long id;
+    private int id;
 
     private UserDTO user;
 
@@ -28,11 +28,11 @@ public class FoodEntryDTO {
 
     private LocalDateTime updatedAt;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

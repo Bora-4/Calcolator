@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface UserService {
     void save(UserDTO userDTO);
-    UserDTO findById(Long id);
+    UserDTO findById(int id);
     UserDTO findByName(String name);
     UserDTO findByEmail(String email);
 
     void update(UserDTO userDTO);
     List<UserDTO> findAll();
-    void delete(Long id);
+    void delete(int id);
     boolean validateUsername(String username);
     boolean validateEmail(String email);
     boolean validatePassword(String password);

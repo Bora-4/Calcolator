@@ -21,7 +21,7 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     }
 
     @Override
-    public FoodEntryEntity findById(Long id) {
+    public FoodEntryEntity findById(int id) {
         return em.find(FoodEntryEntity.class, id);
     }
 
@@ -41,12 +41,12 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     }
 
     @Override
-    public Long countFoodEntriesLast7Days() {
+    public int countFoodEntriesLast7Days() {
         try {
             LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
             return em.createQuery(
                             "SELECT COUNT(f) FROM FoodEntryEntity f WHERE f.entryDate >= :sevenDaysAgo",
-                            Long.class
+                            int.class
                     )
                     .setParameter("sevenDaysAgo", sevenDaysAgo)
                     .getSingleResult();
@@ -67,12 +67,12 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(int id) {
         em.remove(findById(id));
     }
 
     @Override
-    public List<FoodEntryEntity> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<FoodEntryEntity> entryDateFiltering(int userId, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             return em.createQuery(
                             "SELECT f FROM FoodEntryEntity f WHERE f.user.id = :userId AND f.entryDate BETWEEN :startDate AND :endDate",

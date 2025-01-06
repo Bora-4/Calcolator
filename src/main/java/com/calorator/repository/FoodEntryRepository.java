@@ -9,12 +9,12 @@ import java.util.List;
 @Repository
 public interface FoodEntryRepository {
     void save(FoodEntryEntity foodEntry);
-    FoodEntryEntity findById(Long id);
+    FoodEntryEntity findById(int id);
     List<FoodEntryEntity> findFoodEntriesLast7Days();
-    Long countFoodEntriesLast7Days();
+    int countFoodEntriesLast7Days();
     void update(FoodEntryEntity foodEntry);
     List<FoodEntryEntity> findAll();
-    void delete(Long id);
+    void delete(int id);
 
-    List<FoodEntryEntity> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+    List<FoodEntryEntity> entryDateFiltering(int userId, LocalDateTime startDate, LocalDateTime endDate);
 }

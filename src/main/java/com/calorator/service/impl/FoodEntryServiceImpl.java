@@ -30,7 +30,7 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     @Override
     public void save(FoodEntryDTO foodEntryDTO) {
 
-        if( foodEntryDTO.getUser() == null || foodEntryDTO.getUser().getId() == null){
+        if( foodEntryDTO.getUser() == null || foodEntryDTO.getUser().getId() == 0){
             throw new IllegalArgumentException("User information is required.");
         }
 
@@ -46,7 +46,7 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public FoodEntryDTO findById(Long id) {
+    public FoodEntryDTO findById(int id) {
         FoodEntryEntity foodEntry = foodEntryRepository.findById(id);
         if(foodEntry != null){
             return FoodEntryMapper.toDTO(foodEntry);
@@ -63,13 +63,13 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public Long countFoodEntriesLast7Days() {
+    public int countFoodEntriesLast7Days() {
         return foodEntryRepository.countFoodEntriesLast7Days();
     }
 
     @Override
     public void update(FoodEntryDTO foodEntryDTO) {
-        if (foodEntryDTO.getId() == null){
+        if (foodEntryDTO.getId() == 0){
             throw new IllegalArgumentException("Food entry id is required for updating.");
         }
 
@@ -99,7 +99,7 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(int id) {
         FoodEntryEntity foodEntry = foodEntryRepository.findById(id);
         if (foodEntry == null) {
             throw new EntityNotFoundException("Food entry with id " + id + " was not found.");
@@ -108,8 +108,8 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public List<FoodEntryDTO> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
-        if (userId == null || startDate == null || endDate == null) {
+    public List<FoodEntryDTO> entryDateFiltering(int userId, LocalDateTime startDate, LocalDateTime endDate) {
+        if (userId == 0 || startDate == null || endDate == null) {
             throw new IllegalArgumentException("userId, startDate and endDate must not be null.");
         }
 

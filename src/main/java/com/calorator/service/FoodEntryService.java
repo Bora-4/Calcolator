@@ -9,17 +9,17 @@ public interface FoodEntryService {
 
     public void save(FoodEntryDTO foodEntryDTO);
 
-    public FoodEntryDTO findById(Long id);
+    public FoodEntryDTO findById(int id);
 
     public List<FoodEntryDTO> findFoodEntriesLast7Days();
 
-    public Long countFoodEntriesLast7Days();
+    public int countFoodEntriesLast7Days();
 
     public void update(FoodEntryDTO foodEntryDTO);
 
     public List<FoodEntryDTO> findAll();
 
-    public void delete(Long id);
+    public void delete(int id);
 
-    List<FoodEntryDTO> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+    List<FoodEntryDTO> entryDateFiltering(int userId, LocalDateTime startDate, LocalDateTime endDate);
 }

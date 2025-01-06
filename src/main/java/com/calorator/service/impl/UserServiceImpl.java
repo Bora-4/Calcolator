@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserDTO findById(int id) {
         UserEntity userEntity = this.userRepository.findById(id);
         if (userEntity != null){
             return UserMapper.toDTO(userEntity);
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(int id) {
         UserEntity userEntity = userRepository.findById(id);
         if (userEntity == null) {
             throw new EntityNotFoundException("User with id " + id + "was not found.");

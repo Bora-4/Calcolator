@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping("id/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id){
+    public ResponseEntity<UserDTO> findById(@PathVariable("id") int id){
         UserDTO userDTO = userService.findById(id);
         return ResponseEntity.ok(userDTO);
     }
@@ -86,7 +86,7 @@ public class UserController {
     }
 
     @DeleteMapping("id/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") int id){
 
         userService.delete(id);
         return ResponseEntity.ok("User deleted successfully.");
