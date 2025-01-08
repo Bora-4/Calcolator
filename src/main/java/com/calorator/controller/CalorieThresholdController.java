@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/calorie-threshold")
+@RequestMapping("/calorie-threshold")
 public class CalorieThresholdController {
 
     @Autowired
