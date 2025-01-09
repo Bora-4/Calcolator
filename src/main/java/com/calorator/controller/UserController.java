@@ -20,9 +20,9 @@ public class UserController {
     @GetMapping("/login")
     public ResponseEntity<String> authenticateUser(@RequestBody UserDTO userDTO){
         if (userService.authenticate(userDTO.getEmail(), userDTO.getPassword())) {
-            return ResponseEntity.ok("Login successful.");
+            return ResponseEntity.ok("{\"message\":\"Login successful.\"}");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"Invalid credentials.\"}");
     }
 
     @PostMapping
@@ -32,11 +32,11 @@ public class UserController {
             userService.isEmailValid(userDTO.getEmail());
             userService.isPasswordValid(userDTO.getPassword());
             userService.save(userDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\":\"User created successfully.\"}");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }
     }
 
@@ -45,7 +45,7 @@ public class UserController {
         try {
             UserDTO existingUser = userService.findById(userDTO.getId());
             if (existingUser == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\":\"User not found.\"}");
             }
             if (userDTO.getName() != null) {
                 userService.isUsernameValid(userDTO.getName());
@@ -60,11 +60,11 @@ public class UserController {
                 existingUser.setPassword(userDTO.getPassword());
             }
             userService.update(existingUser);
-            return ResponseEntity.ok("User updated successfully.");
+            return ResponseEntity.ok("{\"message\":\"User updated successfully.\"}");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }
     }
 
@@ -87,8 +87,7 @@ public class UserController {
 
     @DeleteMapping("id/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id){
-
         userService.delete(id);
-        return ResponseEntity.ok("User deleted successfully.");
+        return ResponseEntity.ok("{\"message\":\"User deleted successfully.\"}");
     }
 }
