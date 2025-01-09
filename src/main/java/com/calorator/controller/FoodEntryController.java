@@ -33,9 +33,9 @@ public class FoodEntryController {
             if (userId == null) {
                 return ResponseEntity.status(401).build(); // User is not logged in
             }
-            foodEntryService.validateFoodEntry(foodEntryDTO);
             foodEntryDTO.setUser(userService.findById(userId));
             foodEntryDTO.setEntryDate(LocalDateTime.now());
+            foodEntryService.validateFoodEntry(foodEntryDTO);
             foodEntryService.save(foodEntryDTO);
             return ResponseEntity.ok("{\"message\":\"Food entry saved successfully.\"}");
         } catch (IllegalArgumentException | EntityNotFoundException e) {
@@ -102,7 +102,7 @@ public class FoodEntryController {
             LocalDateTime end = LocalDateTime.parse(endDate);
             Long userId = (Long) session.getAttribute("userId");
             if (userId == null) {
-                return ResponseEntity.status(401).build(); // User is not logged in
+                return ResponseEntity.status(401).build();
             }
             List<FoodEntryDTO> foodEntries = foodEntryService.entryDateFiltering(userId, start, end);
             return ResponseEntity.ok(foodEntries);

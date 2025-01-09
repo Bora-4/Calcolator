@@ -130,7 +130,6 @@ document.getElementById('foodEntryForm').addEventListener('submit', function(eve
     })
         .then((response) => {
             if (response.ok) {
-
                 return response.json();
             } else {
 
@@ -145,7 +144,7 @@ document.getElementById('foodEntryForm').addEventListener('submit', function(eve
         })
         .catch(error => {
             console.error('Error:',error);
-            alert('An error occurred. Please try again.');
+            alert(error.message);
         });
 });
 
