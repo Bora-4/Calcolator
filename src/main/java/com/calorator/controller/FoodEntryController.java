@@ -33,6 +33,7 @@ public class FoodEntryController {
             if (userId == null) {
                 return ResponseEntity.status(401).build(); // User is not logged in
             }
+            foodEntryService.validateFoodEntry(foodEntryDTO);
             foodEntryDTO.setUser(userService.findById(userId));
             foodEntryDTO.setEntryDate(LocalDateTime.now());
             foodEntryService.save(foodEntryDTO);
