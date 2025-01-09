@@ -2,6 +2,7 @@ package com.calorator.controller;
 
 import com.calorator.dto.UserDTO;
 import com.calorator.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> authenticateUser(@RequestBody UserDTO userDTO){
+    @PostMapping("/login")
+    public ResponseEntity<String> authenticateUser(@RequestBody UserDTO userDTO, HttpSession session) {
         if (userService.authenticate(userDTO.getEmail(), userDTO.getPassword())) {
+                Long userId = userService.findByEmail(userDTO.getEmail()).getId();
+                String name = userService.findByEmail(userDTO.getEmail()).getName();
+                session.setAttribute("userId", userId);
+                session.setAttribute("user", name);
+                session.setMaxInactiveInterval(30 * 60);
             return ResponseEntity.ok("{\"message\":\"Login successful.\"}");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"Invalid credentials.\"}");

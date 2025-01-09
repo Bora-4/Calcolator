@@ -17,9 +17,19 @@ function navigateToAddFoodEntry() {
 }
 
 function logout() {
-    localStorage.removeItem('token');
-    window.location.href = "/login";
+
+    fetch('/logout', {
+        method: 'GET'
+    })
+        .then(() => {
+            window.location.href = "/home";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
+
+
 
 function showMessage(message) {
     const tableBody = document.getElementById("foodEntriesTableBody");
@@ -118,19 +128,20 @@ document.getElementById('foodEntryForm').addEventListener('submit', function(eve
         },
         body: JSON.stringify(foodEntry)
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok')
+        .then((response) => {
+            if (response.ok) {
+
+                return response.json();
+            } else {
+
+                return response.json().then((errorData) => {
+                    throw new Error(errorData.message || "An error occurred.");
+                });
             }
-            return response.text();
         })
         .then(data => {
-            if (data === 'Food entry saved successfully.'){
-                alert('Food entry added successfully!');
-                closeModal()
-            } else{
-                alert('Failed to add food entry. Please try again.');
-            }
+                alert(data.message);
+                closeModal();
         })
         .catch(error => {
             console.error('Error:',error);

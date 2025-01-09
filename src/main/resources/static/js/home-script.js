@@ -5,6 +5,7 @@ class NavigationManager {
             home: "/home",
             login: "/login",
             signup: "/signup",
+            dashboard: "/dashboard",
         };
     }
 
@@ -26,22 +27,59 @@ class NavigationManager {
     }
 
     attachFormValidation() {
-        const logInForm = document.querySelector(".login form");
-        if (logInForm) {
-            logInForm.addEventListener("submit", (event) => {
-                const email = logInForm.querySelector("input[type='email']").value.trim();
-                const password = logInForm.querySelector("input[type='password']").value.trim();
+            const logInForm = document.querySelector(".login form");
+            if (logInForm) {
+                logInForm.addEventListener("submit", (event) => {
+                    const email = logInForm.querySelector("input[type='email']").value.trim();
+                    const password = logInForm.querySelector("input[type='password']").value.trim();
 
-                if (!this.validateEmail(email)) {
                     event.preventDefault();
-                    alert("Please enter a valid email address.");
-                    return;
-                }
-                if (!password) {
-                    event.preventDefault();
-                    alert("Password is required.");
-                }
-            });
+
+                    if (!validateEmail(email)) {
+                        alert("Please enter a valid email address.");
+                        return;
+                    }
+                    if (!password) {
+                        alert("Password is required.");
+                        return;
+                    }
+
+                    const user = {
+                        email: email,
+                        password: password
+                    };
+
+                    fetch('/users/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user)
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                return response.json().then((errorData) => {
+                                    throw new Error(errorData.message || "An error occurred.");
+                                });
+                            }
+                        })
+                        .then(data => {
+                            alert(data.message);
+                            window.location.href = "/dashboard";
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred. Please try again.');
+                        });
+                });
+            }
+
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
         }
 
         const signUpForm = document.querySelector(".signup form");
@@ -88,18 +126,17 @@ class NavigationManager {
 
                             return response.json();
                         } else {
-
                             return response.json().then((errorData) => {
                                 throw new Error(errorData.message || "An error occurred.");
                             });
                         }
                     })
-                    .then(() => {
-                        alert("Account created successfully!");
+                    .then((data) => {
+                        alert(data.message);
                         window.location.href = "/login";
                     })
                     .catch((error) => {
-                        alert(error.message); e
+                        alert(error.message);
                         console.error("Error:", error);
                     });
             });
