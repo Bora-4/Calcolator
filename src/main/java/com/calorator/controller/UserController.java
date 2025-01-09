@@ -25,7 +25,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"Invalid credentials.\"}");
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
         try {
             userService.isUsernameValid(userDTO.getName());
