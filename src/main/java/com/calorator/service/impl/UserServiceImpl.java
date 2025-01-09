@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean authenticate(String username, String password) {
-        Optional<UserEntity> user = userRepository.findByUserName(username);
+    public boolean authenticate(String email, String password) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             return true;
         }
@@ -55,6 +55,19 @@ public class UserServiceImpl implements UserService {
             return UserMapper.toDTO(userEntity);
         }
         throw new EntityNotFoundException("User with name " + name + "was not found.");
+    }
+
+    @Override
+    public UserDTO findByEmail(String email) {
+        Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
+
+        if (userEntityOptional.isEmpty()) {
+            throw new RuntimeException("User with email " + email + " not found.");
+        }
+
+        // Map UserEntity to UserDto (can use a utility method or library like MapStruct)
+        UserEntity userEntity = userEntityOptional.get();
+        return (UserMapper.toDTO(userEntity));
     }
 
     @Override

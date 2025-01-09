@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: cornflowerblue;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        header .logout-button {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            background: indianred;
+            color: #ffffff;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+
+
+        .profile {
+            background: #ffffff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .profile input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .profile input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .dashboard {
+            margin-top: 20px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard div {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: dodgerblue;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Calorator</h1>
+    <button class="logout-button" onclick="logout()">Log Out</button>
+</header>
+
+<div class="container">
+    <div class="profile">
+        <h2>Profile</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" readonly>
+
+        <button onclick="navigateToAddFoodEntry()">Add New Food Entry</button>
+    </div>
+
+    <div class="dashboard">
+        <h2>Dashboard</h2>
+        <div>
+            <strong>Number of foods consumed today:</strong> <span id="food-count">0</span>
+        </div>
+        <div>
+            <strong>Calories consumed today:</strong> <span id="calories">0</span>
+        </div>
+        <div>
+            <strong>Money spent today:</strong> <span id="money">0</span>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function loadUserData() {
+        const userData = {
+            name: "User",
+            foodCount: 3,
+            totalCalories: 1500,
+            totalMoney: 500,
+        };
+
+        document.getElementById('name').value = userData.name;
+        document.getElementById('food-count').textContent = userData.foodCount;
+        document.getElementById('calories').textContent = userData.totalCalories;
+        document.getElementById('money').textContent = userData.totalMoney.toFixed(2);
+    }
+
+
+    function navigateToAddFoodEntry() {
+        window.location.href = "/add-food-entry.html";
+    }
+
+
+    function logout() {
+
+        localStorage.removeItem('token');
+        window.location.href = "/login.html";
+    }
+
+
+    window.onload = loadUserData;
+</script>
+</body>
+</html>

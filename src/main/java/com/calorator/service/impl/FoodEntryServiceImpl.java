@@ -108,6 +108,18 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
+    public List<FoodEntryDTO> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        if (userId == null || startDate == null || endDate == null) {
+            throw new IllegalArgumentException("userId, startDate and endDate must not be null.");
+        }
+
+        List<FoodEntryEntity> foodEntries = foodEntryRepository.entryDateFiltering(userId, startDate, endDate);
+        return foodEntries.stream()
+                .map(FoodEntryMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void validateFoodEntry(FoodEntryDTO foodEntryDTO) {
         if (foodEntryDTO == null) {
             throw new IllegalArgumentException("FoodEntryDTO must not be null.");

@@ -71,10 +71,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findByUserName(String username) {
+    public Optional<UserEntity> findByUserName(String name) {
         try {
             UserEntity user = em.createQuery("SELECT u FROM UserEntity u WHERE u.name = :name", UserEntity.class)
-                    .setParameter("name", username)
+                    .setParameter("name", name)
                     .getSingleResult();
             return Optional.of(user);
         } catch (NoResultException e) {
@@ -83,6 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
             throw new RuntimeException("Error while fetching user by username", e);
         }
     }
+
 
     @Override
     public Optional<UserEntity> findByPassword(String password) {

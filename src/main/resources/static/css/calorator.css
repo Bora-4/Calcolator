@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #FFB6B9, #FAE3D9);
+    color: #333;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #FF6F61;
+}
+
+.hero h1 span {
+    color: #FF8C42;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #555;
+    opacity: 0.8;
+}
+
+.actions .btn {
+    background-color: #FF6F61;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    margin: 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.actions .btn:hover {
+    background-color: #FF8C42;
+    transform: translateY(-3px);
+}
+
+.actions .btn:active {
+    transform: translateY(1px);
+}
+
+footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 1rem;
+    color: #777;
+}
+
+footer a {
+    color: #FF6F61;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
