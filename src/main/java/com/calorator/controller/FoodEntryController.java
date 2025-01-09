@@ -3,6 +3,7 @@ package com.calorator.controller;
 
 import com.calorator.dto.FoodEntryDTO;
 import com.calorator.service.FoodEntryService;
+import com.calorator.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,21 +17,20 @@ import java.util.List;
 public class FoodEntryController {
 
     private final FoodEntryService foodEntryService;
+    private final UserService userService;
 
-    public FoodEntryController(FoodEntryService foodEntryService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserService userService) {
         this.foodEntryService = foodEntryService;
+        this.userService = userService;
     }
 
     // Save a food entry
-    @PostMapping
-    public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO) {
-        try {
-            foodEntryService.validateFoodEntry(foodEntryDTO);
-            foodEntryService.save(foodEntryDTO);
-            return ResponseEntity.ok("Food entry saved successfully.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/save")
+    public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO, HttpSession session) {
+        foodEntryDTO.setUser(userService.findById((Long)session.getAttribute("userId")));
+        foodEntryDTO.setEntryDate(LocalDateTime.now());
+        foodEntryService.save(foodEntryDTO);
+        return ResponseEntity.ok("Food entry saved successfully.");
     }
 
     // Find food entry by ID
@@ -54,11 +54,6 @@ public class FoodEntryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateFoodEntry(@PathVariable Long id, @RequestBody FoodEntryDTO foodEntryDTO) {
-        try {
-            foodEntryService.validateFoodEntry(foodEntryDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
         foodEntryDTO.setId(id);
         foodEntryService.update(foodEntryDTO);
         return ResponseEntity.ok("Food entry updated successfully.");
@@ -68,11 +63,6 @@ public class FoodEntryController {
     public ResponseEntity<List<FoodEntryDTO>> getAllFoodEntries() {
         List<FoodEntryDTO> foodEntries = foodEntryService.findAll();
         return ResponseEntity.ok(foodEntries);
-    }
-
-    @GetMapping("/view")
-    public String entryPage(){
-        return "food-entries";
     }
 
     @DeleteMapping("/{id}")
