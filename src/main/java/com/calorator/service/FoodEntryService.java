@@ -21,5 +21,7 @@ public interface FoodEntryService {
 
     public void delete(Long id);
 
+    public void validateFoodEntry(FoodEntryDTO foodEntryDTO);
+
     List<FoodEntryDTO> entryDateFiltering(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

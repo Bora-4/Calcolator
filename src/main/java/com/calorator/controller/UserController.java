@@ -20,53 +20,55 @@ public class UserController {
     @GetMapping("/login")
     public ResponseEntity<String> authenticateUser(@RequestBody UserDTO userDTO){
         if (userService.authenticate(userDTO.getEmail(), userDTO.getPassword())) {
-            return ResponseEntity.ok("Login successful.");
+            return ResponseEntity.ok("{\"message\":\"Login successful.\"}");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"Invalid credentials.\"}");
     }
 
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
-        if (!userService.isEmailValid(userDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"Email not valid.\"}");
+
+        try {
+            userService.isUsernameValid(userDTO.getName());
+            userService.isEmailValid(userDTO.getEmail());
+            userService.isPasswordValid(userDTO.getPassword());
+            userService.save(userDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\":\"User created successfully.\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }
-        if (!userService.isUsernameValid(userDTO.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"Username not valid.\"}");
-        }
-        if (!userService.isPasswordValid(userDTO.getPassword())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"Password not valid.\"}");
-        }
-        userService.save(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\":\"User created successfully.\"}");
+
     }
 
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody UserDTO userDTO){
-        UserDTO existingUser = userService.findById(userDTO.getId());
-        if (existingUser == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
-        }
-        if (userDTO.getName() != null) {
-            if (!userService.isUsernameValid(userDTO.getName())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
+    public ResponseEntity<String> update(@RequestBody UserDTO userDTO) {
+        try {
+            UserDTO existingUser = userService.findById(userDTO.getId());
+            if (existingUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\":\"User not found.\"}");
             }
-            existingUser.setName(userDTO.getName());
-        }
-        if (userDTO.getEmail() != null) {
-            if (!userService.isEmailValid(userDTO.getEmail())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists.");
+            if (userDTO.getName() != null) {
+                userService.isUsernameValid(userDTO.getName());
+                existingUser.setName(userDTO.getName());
             }
-            existingUser.setEmail(userDTO.getEmail());
-        }
-        if (userDTO.getPassword() != null) {
-            if (!userService.isPasswordValid(userDTO.getPassword())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Password not valid.");
+            if (userDTO.getEmail() != null) {
+                userService.isEmailValid(userDTO.getEmail());
+                existingUser.setEmail(userDTO.getEmail());
             }
-            existingUser.setPassword(userDTO.getPassword());
+            if (userDTO.getPassword() != null) {
+                userService.isPasswordValid(userDTO.getPassword());
+                existingUser.setPassword(userDTO.getPassword());
+            }
+            userService.update(existingUser);
+            return ResponseEntity.ok("{\"message\":\"User updated successfully.\"}");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }
-        userService.update(existingUser);
-        return ResponseEntity.ok("User updated successfully.");
     }
 
     @GetMapping
@@ -89,8 +91,7 @@ public class UserController {
 
     @DeleteMapping("id/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id){
-
         userService.delete(id);
-        return ResponseEntity.ok("User deleted successfully.");
+        return ResponseEntity.ok("{\"message\":\"User deleted successfully.\"}");
     }
 }
