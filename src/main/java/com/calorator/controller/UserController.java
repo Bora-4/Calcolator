@@ -25,20 +25,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
     }
 
-    @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO){
-        if (!userService.isUsernameValid(userDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email not valid.");
+    @PostMapping("/signup")
+    public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
+        if (!userService.isEmailValid(userDTO.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"Email not valid.\"}");
         }
         if (!userService.isUsernameValid(userDTO.getName())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username not valid.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"Username not valid.\"}");
         }
         if (!userService.isPasswordValid(userDTO.getPassword())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Password not valid.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"Password not valid.\"}");
         }
         userService.save(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\":\"User created successfully.\"}");
     }
+
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody UserDTO userDTO){
@@ -72,6 +73,7 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> findAll(){
         return ResponseEntity.ok(userService.findAll());
     }
+
 
     @GetMapping("id/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id){
