@@ -127,12 +127,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Username cannot be empty.");
         }
         String usernamePattern = "^[a-zA-Z0-9_-]{3,15}$";
+
         if (!username.matches(usernamePattern)) {
             throw new IllegalArgumentException("Invalid username format.");
         }
         if (userRepository.findByUserName(username).isPresent()) {
             throw new IllegalStateException("Username already exists.");
         }
+
     }
 
     @Override

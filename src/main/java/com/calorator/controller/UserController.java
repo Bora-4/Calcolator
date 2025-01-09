@@ -27,6 +27,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
+
         try {
             userService.isUsernameValid(userDTO.getName());
             userService.isEmailValid(userDTO.getEmail());
@@ -38,7 +39,9 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }
+
     }
+
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody UserDTO userDTO) {
@@ -72,6 +75,7 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> findAll(){
         return ResponseEntity.ok(userService.findAll());
     }
+
 
     @GetMapping("id/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id){

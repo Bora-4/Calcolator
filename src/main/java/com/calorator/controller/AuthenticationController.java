@@ -9,14 +9,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class LoginController {
+public class AuthenticationController {
 
     @Autowired
     private UserServiceImpl userService;
 
+    @GetMapping("/home")
+    public String homePage() {
+        return "home";
+    }
+
     @GetMapping("/login")
     public String loginPage() {
         return "login";
+    }
+
+    @GetMapping("/signup")
+    public String signupPage() {
+        return "signup";
     }
 
     @PostMapping("/login")
@@ -44,10 +54,5 @@ public class LoginController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/home";
-    }
-
-    @GetMapping("/home")
-    public String homePage() {
-        return "home";
     }
 }
