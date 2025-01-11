@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,6 +106,11 @@ public class FoodEntryServiceImpl implements FoodEntryService {
             throw new EntityNotFoundException("Food entry with id " + id + " was not found.");
         }
         foodEntryRepository.delete(id);
+    }
+
+    @Override
+    public BigDecimal calculateMonthlySpending(Long userId, int month, int year) {
+        return foodEntryRepository.calculateMonthlySpending(userId, month, year);
     }
 
     @Override

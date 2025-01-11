@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -69,6 +70,22 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     @Override
     public void delete(Long id) {
         em.remove(findById(id));
+    }
+
+    @Override
+    public BigDecimal calculateMonthlySpending(Long userId, int month, int year) {
+        try {
+            String sql = "SELECT COALESCE(SUM(price), 0) FROM food_entry " +
+                    "WHERE user_id = :userId AND MONTH(entry_date) = :month AND YEAR(entry_date) = :year";
+
+            return (BigDecimal) em.createNativeQuery(sql)
+                    .setParameter("userId", userId)
+                    .setParameter("month", month)
+                    .setParameter("year", year)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while calculating monthly spending.", e);
+        }
     }
 
     @Override
