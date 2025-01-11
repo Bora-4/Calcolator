@@ -9,8 +9,6 @@ import java.util.Date;
 
 public class CalorieThresholdEntity {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "threshold_id")
@@ -30,12 +28,14 @@ public class CalorieThresholdEntity {
     @Column(name = "is_warning_triggered")
     private boolean isWarningTriggered;
 
+    @Column(name = "calorie_limit")
+    private int calorieLimit;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
 
 
     public int getThresholdId() {
@@ -76,6 +76,14 @@ public class CalorieThresholdEntity {
 
     public void setWarningTriggered(boolean warningTriggered) {
         isWarningTriggered = warningTriggered;
+    }
+
+    public int getCalorieLimit() {
+        return calorieLimit;
+    }
+
+    public void setCalorieLimit(int calorieLimit) {
+        this.calorieLimit = calorieLimit;
     }
 
     public LocalDateTime getCreatedAt() {
