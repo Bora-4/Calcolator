@@ -5,13 +5,16 @@ import com.calorator.entity.UserEntity;
 import com.calorator.repository.FoodEntryRepository;
 import com.calorator.repository.MonthlyExpenditureRepository;
 import com.calorator.service.MonthlyExpenditureService;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Service
+@Transactional
 public class MonthlyExpenditureServiceImpl implements MonthlyExpenditureService {
 
 
