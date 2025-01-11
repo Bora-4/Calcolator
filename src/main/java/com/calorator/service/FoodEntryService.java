@@ -2,6 +2,7 @@ package com.calorator.service;
 
 import com.calorator.dto.FoodEntryDTO;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface FoodEntryService {
     public List<FoodEntryDTO> findAll();
 
     public void delete(Long id);
+
+    public BigDecimal calculateMonthlySpending(Long userId, int month, int year);
 
     public void validateFoodEntry(FoodEntryDTO foodEntryDTO);
 
