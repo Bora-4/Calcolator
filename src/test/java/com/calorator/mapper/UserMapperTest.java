@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserMapperTest {
 
     @Test
-    void testToEntity_ValidUserDTOProvided(){
+    void testToEntity_validUserDTOProvided(){
 
         UserDTO userDTO = new UserDTO();
         userDTO.setId(1L);
@@ -30,12 +30,12 @@ public class UserMapperTest {
     }
 
     @Test
-    void testToEntity_NullUserDTOProvided(){
+    void testToEntity_nullUserDTOProvided(){
         assertThrows(NullPointerException.class, () -> UserMapper.toEntity(null));
     }
 
     @Test
-    void testToDTO_ValidUserEntityProvided(){
+    void testToDTO_validUserEntityProvided(){
 
         UserEntity user = new UserEntity();
         user.setId(1L);
@@ -55,7 +55,7 @@ public class UserMapperTest {
     }
 
     @Test
-    void testToDTO_NullUserEntityProvided(){
+    void testToDTO_nullUserEntityProvided(){
         assertThrows(NullPointerException.class, () -> UserMapper.toDTO(null));
     }
 }
