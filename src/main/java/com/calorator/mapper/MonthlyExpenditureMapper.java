@@ -41,7 +41,7 @@ public class MonthlyExpenditureMapper {
         expenditureDTO.setCreatedAt(expenditure.getCreatedAt());
         expenditureDTO.setUpdatedAt(expenditure.getUpdatedAt());
 
-        if(expenditureDTO.getUser() != null) {
+        if(expenditure.getUser() != null) {
             expenditureDTO.setUser(UserMapper.toDTO(expenditure.getUser()));
         } else {
             expenditureDTO.setUser(null);
