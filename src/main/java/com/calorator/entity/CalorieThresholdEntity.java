@@ -22,7 +22,7 @@ public class CalorieThresholdEntity {
     @Temporal(TemporalType.DATE)
     private Date thresholdDate;
 
-    @Column(name = "total_calories")
+    @Column(name = "total_calories", nullable = false)
     private int totalCalories;
 
     @Column(name = "is_warning_triggered")
