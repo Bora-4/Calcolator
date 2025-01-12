@@ -25,7 +25,7 @@ public class MonthlyExpenditureEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Column(name = "month")
+    @Column(name = "month", nullable = false)
     private LocalDate month;
 
     @Column(name = "total_spent")
