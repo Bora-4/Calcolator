@@ -25,8 +25,8 @@ public class MonthlyExpenditureMapperTest {
 
         UserEntity user = new UserEntity();
         user.setId(1L);
-        user.setName("John Doe");
-        user.setEmail("john.doe@example.com");
+        user.setName("test");
+        user.setEmail("test@gmail.com");
 
         MonthlyExpenditureEntity expenditureEntity = MonthlyExpenditureMapper.toEntity(expenditureDTO, user);
 
