@@ -13,7 +13,7 @@ public class UserMapperTest {
 
         UserDTO userDTO = new UserDTO();
         userDTO.setId(1L);
-        userDTO.setName("Bora Rrena");
+        userDTO.setName("borarrena");
         userDTO.setEmail("bora.rrena@fti.edu.al");
         userDTO.setRole("admin");
         userDTO.setPassword("Password.2025");
@@ -39,7 +39,7 @@ public class UserMapperTest {
 
         UserEntity user = new UserEntity();
         user.setId(1L);
-        user.setName("Bora Rrena");
+        user.setName("borarrena");
         user.setEmail("bora.rrena@fti.edu.al");
         user.setRole(UserEntity.Role.admin);
         user.setPassword("Password.2025");
