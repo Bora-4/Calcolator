@@ -3,6 +3,8 @@ package com.calorator.controller;
 
 import com.calorator.dto.FoodEntryDTO;
 import com.calorator.service.FoodEntryService;
+import com.calorator.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,23 +18,42 @@ import java.util.List;
 public class FoodEntryController {
 
     private final FoodEntryService foodEntryService;
+    private final UserService userService;
 
-    public FoodEntryController(FoodEntryService foodEntryService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserService userService) {
         this.foodEntryService = foodEntryService;
+        this.userService = userService;
     }
 
     // Save a food entry
-    @PostMapping
-    public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO) {
-        foodEntryService.save(foodEntryDTO);
-        return ResponseEntity.ok("Food entry saved successfully.");
+    @PostMapping("/save")
+    public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO, HttpSession session) {
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return ResponseEntity.status(401).build(); // User is not logged in
+            }
+            foodEntryDTO.setUser(userService.findById(userId));
+            foodEntryDTO.setEntryDate(LocalDateTime.now());
+            foodEntryService.validateFoodEntry(foodEntryDTO);
+            foodEntryService.save(foodEntryDTO);
+            return ResponseEntity.ok("{\"message\":\"Food entry saved successfully.\"}");
+        } catch (IllegalArgumentException | EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     // Find food entry by ID
     @GetMapping("/{id}")
     public ResponseEntity<FoodEntryDTO> findFoodEntryById(@PathVariable Long id) {
-        FoodEntryDTO foodEntryDTO = foodEntryService.findById(id);
-        return ResponseEntity.ok(foodEntryDTO);
+        try {
+            FoodEntryDTO foodEntryDTO = foodEntryService.findById(id);
+            return ResponseEntity.ok(foodEntryDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/last-7-days")
@@ -49,9 +70,14 @@ public class FoodEntryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateFoodEntry(@PathVariable Long id, @RequestBody FoodEntryDTO foodEntryDTO) {
-        foodEntryDTO.setId(id);
-        foodEntryService.update(foodEntryDTO);
-        return ResponseEntity.ok("Food entry updated successfully.");
+        try {
+            foodEntryDTO.setId(id);
+            foodEntryService.validateFoodEntry(foodEntryDTO);
+            foodEntryService.update(foodEntryDTO);
+            return ResponseEntity.ok("{\"message\":\"Food entry updated successfully.\"}");
+        } catch (IllegalArgumentException | EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
+        }
     }
 
     @GetMapping
@@ -60,15 +86,10 @@ public class FoodEntryController {
         return ResponseEntity.ok(foodEntries);
     }
 
-    @GetMapping("/view")
-    public String entryPage(){
-        return "food-entries";
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFoodEntry(@PathVariable Long id) {
         foodEntryService.delete(id);
-        return ResponseEntity.ok("Food entry deleted successfully.");
+        return ResponseEntity.ok("{\"message\":\"Food entry deleted successfully.\"}");
     }
 
     @GetMapping("/filter-by-date")
@@ -76,13 +97,18 @@ public class FoodEntryController {
             @RequestParam String startDate,
             @RequestParam String endDate,
             HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return ResponseEntity.status(401).build(); // User is not logged in
+        try {
+            LocalDateTime start = LocalDateTime.parse(startDate);
+            LocalDateTime end = LocalDateTime.parse(endDate);
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return ResponseEntity.status(401).build();
+            }
+            List<FoodEntryDTO> foodEntries = foodEntryService.entryDateFiltering(userId, start, end);
+            return ResponseEntity.ok(foodEntries);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        LocalDateTime start = LocalDateTime.parse(startDate);
-        LocalDateTime end = LocalDateTime.parse(endDate);
-        List<FoodEntryDTO> foodEntries = foodEntryService.entryDateFiltering(userId, start, end);
-        return ResponseEntity.ok(foodEntries);
+
     }
 }
