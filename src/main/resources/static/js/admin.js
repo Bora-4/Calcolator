@@ -60,3 +60,22 @@
     document.getElementById('avgCalories').textContent = '2200';
     document.getElementById('exceedingUsers').innerHTML = '<li>John Doe</li><li>Jane Smith</li>';
 
+
+   const logoutbtn=document.getElementById('logout-btn');
+    function logout() {
+
+        fetch('/logout', {
+            method: 'GET'
+        })
+            .then(() => {
+                window.location.href = "/home";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    logoutbtn.addEventListener("click" , () => {
+
+        logout();
+    });
