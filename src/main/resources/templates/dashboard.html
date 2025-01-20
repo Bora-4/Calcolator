@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calorator Dashboard</title>
-    <link rel="stylesheet" href="../static/css/dashboard-style.css">
+    <link rel="stylesheet" href="dashboard-style.css">
 </head>
 <body>
 <header>
@@ -14,65 +14,107 @@
 
 <div class="container">
     <div class="profile">
-        <h2>Profile</h2>
+        <h2>USER PROFILE</h2>
         <label for="name">Name:</label>
-        <input type="text" id="name" readonly>
-        <button onclick="openModal()">Add New Food Entry</button>
+        <input type="text" id="name" value="User" disabled>
+
+        <div id="addFoodEntry">
+            <h3>PLEASE ADD FOOD ENTRY</h3>
+            <form id="foodEntryForm">
+                <div>
+                    <label for="foodName">Food Name:</label>
+                    <input type="text" id="foodName" required>
+                </div>
+                <div>
+                    <label for="calories">Calories:</label>
+                    <input type="number" id="calories" required>
+                </div>
+                <div>
+                    <label for="price">Price (€):</label>
+                    <input type="number" step="0.01" id="price" required>
+                </div>
+                <button type="submit" class="button">Add Entry</button>
+            </form>
+            <div class="buttons-container">
+                <button id="viewWeeklySummaryButton" class="button">View Weekly Summary</button>
+            </div>
+        </div>
     </div>
 
     <div class="dashboard">
-        <h2>Dashboard</h2>
-        <div>
-            <strong>Number of foods consumed today:</strong> <span id="food-count">0</span>
-        </div>
-        <div>
-            <strong>Calories consumed today:</strong> <span id="total_calories">0</span>
-        </div>
-        <div>
-            <strong>Money spent today:</strong> <span id="money">0</span>
+        <h2>Today's Overview</h2>
+        <div class="overview">
+            <div>
+                <strong>Foods Consumed:</strong> <span id="food-count">0</span>
+            </div>
+            <div>
+                <strong>Total Calories:</strong> <span id="total_calories">0</span>
+            </div>
+            <div>
+                <strong>Total Spent (€):</strong> <span id="money">0.00</span>
+            </div>
         </div>
 
-        <form id="filterForm">
-            <input type="datetime-local" id="startDate" class="input" required>
-            <input type="datetime-local" id="endDate" class="input" required>
-            <button type="submit" class="button">Filter</button>
+        <form id="filterForm" class="filter-form">
+            <h3>Filter by Date</h3>
+            <div class="filter-section">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" required>
+                <input type="time" id="startTime" required>
+            </div>
+            <div class="filter-section">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" required>
+                <input type="time" id="endTime" required>
+            </div>
+            <button type="submit" class="button apply-filter">Apply Filter</button>
         </form>
 
-        <table>
+        <table id="foodEntriesTable">
             <thead>
             <tr>
                 <th>Food Name</th>
                 <th>Calories</th>
-                <th>Price</th>
+                <th>Price (€)</th>
                 <th>Entry Date</th>
                 <th>Created At</th>
                 <th>Updated At</th>
             </tr>
             </thead>
             <tbody id="foodEntriesTableBody">
-            <!-- Food entries will be populated here -->
+            <tr>
+                <td colspan="6" style="text-align: center; font-style: italic;">No entries found.</td>
+            </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Modal -->
-<div id="foodEntryModal" class="modal">
+<!-- Weekly Summary Modal -->
+<div id="weeklySummaryModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Add New Food Entry</h2>
-        <form id="foodEntryForm">
-            <label for="foodName">Food Name:</label>
-            <input type="text" id="foodName" required>
-            <label for="calories">Calories:</label>
-            <input type="number" id="calories" required>
-            <label for="price">Price:</label>
-            <input type="number" id="price" step="0.01" required>
-            <button type="submit" class="button">Add Entry</button>
-        </form>
+        <button id="closeWeeklySummaryModal" class="close">&times;</button>
+        <h2>Weekly Summary</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Day</th>
+                <th>Calories Consumed</th>
+                <th>Threshold Exceeded</th>
+            </tr>
+            </thead>
+            <tbody id="weeklySummaryTableBody">
+            <!-- Dynamically populated -->
+            </tbody>
+        </table>
+        <div>
+            <p><strong>Total Calories This Week:</strong> <span id="totalCaloriesWeek">0</span></p>
+            <p><strong>Days Exceeded Calorie Threshold:</strong> <span id="thresholdExceededDays">0</span></p>
+            <p><strong>Total Expenditure This Week (€):</strong> <span id="totalExpenditureWeek">0.00</span></p>
+        </div>
     </div>
 </div>
 
-<script src="../static/js/dashboard-script.js"></script>
+<script src="dashboard-script.js"></script>
 </body>
 </html>
