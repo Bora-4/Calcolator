@@ -79,3 +79,22 @@
 
         logout();
     });
+
+   //user search , fetch user food entries
+    const searchInput = document.querySelector('.search-user input');
+    const userList = document.querySelector('.user-list ul');
+
+    async function fetchUsers(query = '') {
+        const response = await fetch(`/users?query=${query}`);
+        const users = await response.json();
+
+        userList.innerHTML = users.map(user => `
+        <li>
+            ${user.name} <button onclick="fetchUserFoodEntries(${user.id})">Choose</button>
+        </li>
+    `).join('');
+    }
+
+    searchInput.addEventListener('input', () => fetchUsers(searchInput.value));
+    fetchUsers(); // Fetch all users on page load
+
