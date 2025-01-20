@@ -21,12 +21,15 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(@RequestBody UserDTO userDTO, HttpSession session) {
         if (userService.authenticate(userDTO.getEmail(), userDTO.getPassword())) {
-                Long userId = userService.findByEmail(userDTO.getEmail()).getId();
-                String name = userService.findByEmail(userDTO.getEmail()).getName();
-                session.setAttribute("userId", userId);
-                session.setAttribute("user", name);
-                session.setMaxInactiveInterval(30 * 60);
-            return ResponseEntity.ok("{\"message\":\"Login successful.\"}");
+            UserDTO user = userService.findByEmail(userDTO.getEmail());
+
+            session.setAttribute("userId", user.getId());
+            session.setAttribute("user", user.getName());
+            session.setAttribute("role", user.getRole());
+            session.setMaxInactiveInterval(30 * 60);
+
+            String responseBody = String.format("{\"message\":\"Login successful.\", \"role\":\"%s\"}", user.getRole());
+            return ResponseEntity.ok(responseBody);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"Invalid credentials.\"}");
     }

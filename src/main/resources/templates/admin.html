@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../static/css/admin.css">
+</head>
+<body>
+<div class="admin-dashboard">
+  <header>
+    <div class="admin-info">
+      <div class="avatar"></div>
+      <h2>Admin</h2>
+      <p>admin@gmail.com</p>
+    </div>
+    <div class="logout">
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <!-- User List  -->
+  <div class="user-management">
+    <div class="search-user">
+      <input type="text" placeholder="Search user">
+    </div>
+
+    <div class="user-list">
+      <p>230 Users</p>
+      <ul>
+        <li>User Name <button>Chose</button></li>
+        <li>User Name <button>Chose</button></li>
+        <li>User Name <button>Chose</button></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!--Food Management  -->
+  <div class="food-management">
+    <h2>Manage Food Entries</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Food Item</th>
+        <th>Calories</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="foodTableBody">
+      <!-- Dynamic rows will be added here -->
+      </tbody>
+    </table>
+    <button class="btn" onclick="addNewFoodEntry()">Add New Entry</button>
+  </div>
+
+  <!-- Reports Section -->
+  <section id="reports" class="reports">
+    <h2>Reports</h2>
+    <div class="report">
+      <p><span class="highlight">Entries last 7 days:</span> <span id="last7Days">0</span></p>
+      <p><span class="highlight">Average calories per user (last 7 days):</span> <span id="avgCalories">0</span></p>
+      <p><span class="highlight">Users exceeding monthly price limit (last month):</span></p>
+      <ul id="exceedingUsers">
+        <!-- Dynamic list will be added here -->
+      </ul>
+    </div>
+  </section>
+
+
+
+</div>
+
+<script src="../static/js/admin.js"></script>
+
+
+</body>
+</html>

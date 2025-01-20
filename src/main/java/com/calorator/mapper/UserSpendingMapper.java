@@ -33,7 +33,7 @@ public class UserSpendingMapper {
 
         UserSpendingDTO userSpendingDTO = new UserSpendingDTO();
         userSpendingDTO.setId(userSpending.getId());
-        userSpendingDTO.setTotalSpent(userSpendingDTO.getTotalSpent());
+        userSpendingDTO.setTotalSpent(userSpending.getTotalSpent());
 
         if(userSpending.getUser() != null){
             userSpendingDTO.setUser(UserMapper.toDTO(userSpending.getUser()));
