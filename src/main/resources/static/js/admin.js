@@ -95,6 +95,7 @@
     `).join('');
     }
 
+
     searchInput.addEventListener('input', () => fetchUsers(searchInput.value));
     fetchUsers(); // Fetch all users on page load
 
