@@ -50,8 +50,6 @@ function populateTable(data) {
             <td>${entry.calories}</td>
             <td>${entry.price}</td>
             <td>${entry.entryDate}</td>
-            <td>${entry.createdAt}</td>
-            <td>${entry.updatedAt}</td>
         `;
         tableBody.appendChild(row);
     });

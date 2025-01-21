@@ -198,6 +198,7 @@ thead th {
     color: white;
     padding: 10px;
     text-align: left;
+    width: 90px;
 }
 
 tbody td {
