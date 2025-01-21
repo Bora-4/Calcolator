@@ -123,7 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         const startDate = document.getElementById("startDate").value;
+        const startTime = document.getElementById("startTime").value;
         const endDate = document.getElementById("endDate").value;
+        const endTime = document.getElementById("endTime").value;
 
         if (!startDate || !endDate) {
             alert("Both start date and end date are required.");
@@ -133,8 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Start date cannot be later than end date.");
             return;
         }
+        let start = new Date(startDate + 'T' + startTime).toISOString();
+        let end = new Date(endDate + 'T' + endTime).toISOString();
 
-        fetchEntries(startDate, endDate);
+        // Remove the 'Z' from the datetime strings before sending
+        start = start.replace("Z", "");
+        end = end.replace("Z", "");
+
+        fetchEntries(start, end);
     });
 });
 
