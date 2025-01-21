@@ -1,5 +1,6 @@
 package com.calorator.dto;
 
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class FoodEntryDTO {
     private Integer calories;
 
     private Double price;
+
 
     private LocalDateTime entryDate;
 
@@ -72,6 +74,7 @@ public class FoodEntryDTO {
         return entryDate;
     }
 
+    @PastOrPresent
     public void setEntryDate(LocalDateTime entryDate) {
         this.entryDate = entryDate;
     }
