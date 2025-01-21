@@ -1,68 +1,57 @@
 package com.calorator.controller;
 
-import com.calorator.dto.UserDTO;
-import com.calorator.service.ReportService;
+import com.calorator.dto.WeeklyStatisticsDTO;
+import com.calorator.service.UserService;
+import com.calorator.service.WeeklyStatisticsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/reports/weekly")
+@RequestMapping("/api/weekly-statistics")
 public class WeeklyStatisticsController {
 
-    private final ReportService reportService;
+    private final WeeklyStatisticsService weeklyStatisticsService;
 
-    public WeeklyStatisticsController(ReportService reportService) {
-        this.reportService = reportService;
+    private final UserService userService;
+
+    public WeeklyStatisticsController(WeeklyStatisticsService weeklyStatisticsService, UserService userService) {
+        this.weeklyStatisticsService = weeklyStatisticsService;
+        this.userService = userService;
     }
 
-    // Endpoint to get the weekly statistics for all users
+    @PostMapping("/{reportId}")
+    public ResponseEntity<WeeklyStatisticsDTO> createWeeklyStatistics(
+            @PathVariable Long reportId,
+            @RequestBody WeeklyStatisticsDTO weeklyStatisticsDTO) {
+        WeeklyStatisticsDTO createdDTO = weeklyStatisticsService.createWeeklyStatistics(weeklyStatisticsDTO, reportId);
+        return ResponseEntity.ok(createdDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<WeeklyStatisticsDTO> updateWeeklyStatistics(
+            @PathVariable Long id,
+            @RequestBody WeeklyStatisticsDTO weeklyStatisticsDTO) {
+        WeeklyStatisticsDTO updatedDTO = weeklyStatisticsService.updateWeeklyStatistics(id, weeklyStatisticsDTO);
+        return ResponseEntity.ok(updatedDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<WeeklyStatisticsDTO> getWeeklyStatisticsById(@PathVariable Long id) {
+        WeeklyStatisticsDTO weeklyStatisticsDTO = weeklyStatisticsService.getWeeklyStatisticsById(id);
+        return ResponseEntity.ok(weeklyStatisticsDTO);
+    }
+
     @GetMapping
-    public ResponseEntity<String> getWeeklyStatistics() {
-        try {
-            //Needs a method getWeeklyStatisticsReport to be created in ReportService
-            String weeklyReport = reportService.getWeeklyStatisticsReport();
-            return ResponseEntity.ok(weeklyReport);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("{\"message\":\"Error generating report: " + e.getMessage() + "\"}");
-        }
+    public ResponseEntity<List<WeeklyStatisticsDTO>> getAllWeeklyStatistics() {
+        List<WeeklyStatisticsDTO> weeklyStatisticsList = weeklyStatisticsService.getAllWeeklyStatistics();
+        return ResponseEntity.ok(weeklyStatisticsList);
     }
 
-    // Endpoint to get a list of users exceeding their monthly price limit
-    @GetMapping("/exceeding-users")
-    public ResponseEntity<List<UserDTO>> getExceedingUsers() {
-        try {
-            //Needs a method getUsersExceedingMonthlyPriceLimit to be created in ReportService
-            List<UserDTO> exceedingUsers = reportService.getUsersExceedingMonthlyPriceLimit();
-            return ResponseEntity.ok(exceedingUsers);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteWeeklyStatistics(@PathVariable Long id) {
+        weeklyStatisticsService.deleteWeeklyStatistics(id);
+        return ResponseEntity.noContent().build();
     }
-
-    // Endpoint to get the total calories consumed in the past week
-    @GetMapping("/total-calories")
-    public ResponseEntity<Integer> getTotalCaloriesLastWeek() {
-        try {
-            //Needs a method getTotalCaloriesLastWeek to be created in ReportService
-            int totalCalories = reportService.getTotalCaloriesLastWeek();
-            return ResponseEntity.ok(totalCalories);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
-    }
-
-    // Endpoint to get the average calories consumed per user in the past week
-    @GetMapping("/average-calories")
-    public ResponseEntity<Double> getAverageCaloriesPerUserLastWeek() {
-        try {
-            //Needs a method getAverageCaloriesPerUserLastWeek to be created in ReportService
-            double averageCalories = reportService.getAverageCaloriesPerUserLastWeek();
-            return ResponseEntity.ok(averageCalories);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
-    }
-
 }
