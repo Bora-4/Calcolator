@@ -195,3 +195,48 @@ document.getElementById('viewWeeklySummaryButton').addEventListener('click', fun
 document.getElementById('closeWeeklySummaryModal').addEventListener('click', function() {
     document.getElementById('weeklySummaryModal').style.display = 'none';
 });
+function fetchTodayEntries() {
+    const today = new Date().toISOString().split("T")[0];
+    const startOfDay = `${today}T00:00:00`;
+    const endOfDay = `${today}T23:59:59`;
+    showMessage("Loading...");
+    fetch(`food-entries/filter-by-date?startDate=${startOfDay}&endDate=${endOfDay}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Normalize response format if needed
+            const normalizedData = Array.isArray(data) ? { entries: data } : data;
+            updateOverview(normalizedData);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            showMessage("An error occurred while fetching data. Please try again later.");
+        });
+
+}
+
+function updateOverview(data) {
+    const entries = Array.isArray(data) ? data : data.entries;
+
+    if (!Array.isArray(entries)) {
+        console.warn("Invalid data format:", data);
+        return;
+    }
+
+    const foodCount = entries.length;
+    const totalCalories = entries.reduce((total, entry) => total + (entry.calories || 0), 0);
+    const totalExpenditure = entries.reduce((total, entry) => total + (entry.price || 0), 0);
+
+    document.getElementById("food-count").textContent = foodCount;
+    document.getElementById("total_calories").textContent = totalCalories;
+    document.getElementById("money").textContent = totalExpenditure.toFixed(2);
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetchTodayEntries();
+});
