@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@Transactional
+
 public class UserSpendingRepositoryImpl implements UserSpendingRepository {
 
     @PersistenceContext
