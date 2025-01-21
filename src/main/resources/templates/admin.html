@@ -15,25 +15,35 @@
       <p>admin@gmail.com</p>
     </div>
     <div class="logout">
-      <button id="logout-btn">Log Out</button>
+      <button id="logout-btn" onclick="logout()">Log Out</button>
     </div>
   </header>
 
   <!-- User List  -->
   <div class="user-management">
     <div class="search-user">
-      <input type="text" placeholder="Search user">
+      <input type="text" placeholder="Search user" id="input" oninput="searchInput()">
     </div>
 
     <div class="user-list">
-      <p>230 Users</p>
-      <ul>
-        <li>User Name <button>Delete</button></li>
-        <li>User Name <button>Delete</button></li>
-        <li>User Name <button>Delete</button></li>
+<!--      <p><span id="userCount">230</span> Users</p>-->
+      <ul id="userList">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          
+          <!-- Add other columns as needed -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- User rows will be inserted here -->
+        </tbody>
       </ul>
     </div>
   </div>
+
 
   <!--Food Management  -->
   <div class="food-management">
@@ -66,12 +76,9 @@
         <!-- Dynamic list will be added here -->
       </ul>
     </div>
+    <button onclick="generateReport()">Generate Report</button>
   </section>
-
-
-
 </div>
-
 <script src="../static/js/admin.js"></script>
 
 

@@ -17,7 +17,6 @@ function navigateToAddFoodEntry() {
 }
 
 function logout() {
-
     fetch('/logout', {
         method: 'GET'
     })
@@ -28,8 +27,6 @@ function logout() {
             console.error('Error:', error);
         });
 }
-
-
 
 function showMessage(message) {
     const tableBody = document.getElementById("foodEntriesTableBody");
@@ -109,43 +106,52 @@ function closeModal() {
     document.getElementById('foodEntryModal').style.display = "none";
 }
 
-document.getElementById('foodEntryForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const foodName = document.getElementById('foodName').value;
-    const calories = document.getElementById('calories').value;
-    const price = document.getElementById('price').value;
+document.getElementById('viewWeeklySummaryButton').addEventListener('click', function() {
+    let weeklyData = [
+        { day: 'Monday', calories: 2500, thresholdExceeded: true },
+        { day: 'Tuesday', calories: 2000, thresholdExceeded: false },
+        { day: 'Wednesday', calories: 3000, thresholdExceeded: true },
+        { day: 'Thursday', calories: 2200, thresholdExceeded: false },
+        { day: 'Friday', calories: 2700, thresholdExceeded: true },
+        { day: 'Saturday', calories: 1900, thresholdExceeded: false },
+        { day: 'Sunday', calories: 3100, thresholdExceeded: true },
+    ];
 
-    const foodEntry = {
-        foodName: foodName,
-        calories: calories,
-        price: price
-    };
+    let tableBody = document.getElementById('weeklySummaryTableBody');
+    let totalCalories = 0;
+    let totalExpenditure = 0;
+    let daysExceeded = 0;
 
-    fetch('/food-entries/save', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(foodEntry)
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
+    tableBody.innerHTML = '';
+    weeklyData.forEach((data) => {
+        let row = document.createElement('tr');
 
-                return response.json().then((errorData) => {
-                    throw new Error(errorData.message || "An error occurred.");
-                });
-            }
-        })
-        .then(data => {
-                alert(data.message);
-                closeModal();
-        })
-        .catch(error => {
-            console.error('Error:',error);
-            alert(error.message);
-        });
+        let dayCell = document.createElement('td');
+        dayCell.textContent = data.day;
+        row.appendChild(dayCell);
+
+        let caloriesCell = document.createElement('td');
+        caloriesCell.textContent = data.calories;
+        row.appendChild(caloriesCell);
+
+        let exceededCell = document.createElement('td');
+        exceededCell.textContent = data.thresholdExceeded ? 'Yes' : 'No';
+        row.appendChild(exceededCell);
+
+        tableBody.appendChild(row);
+
+        totalCalories += data.calories;
+        if (data.thresholdExceeded) daysExceeded++;
+        totalExpenditure += (data.calories * 0.05);
+    });
+
+    document.getElementById('totalCaloriesWeek').textContent = totalCalories;
+    document.getElementById('thresholdExceededDays').textContent = daysExceeded;
+    document.getElementById('totalExpenditureWeek').textContent = totalExpenditure.toFixed(2);
+
+    document.getElementById('weeklySummaryModal').style.display = 'block';
 });
 
-window.onload = loadUserData;
+document.getElementById('closeWeeklySummaryModal').addEventListener('click', function() {
+    document.getElementById('weeklySummaryModal').style.display = 'none';
+});

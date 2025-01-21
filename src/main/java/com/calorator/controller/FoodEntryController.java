@@ -27,13 +27,16 @@ public class FoodEntryController {
 
     // Save a food entry
     @PostMapping("/save")
-    public ResponseEntity<String> saveFoodEntry(@RequestBody FoodEntryDTO foodEntryDTO, HttpSession session) {
+    public ResponseEntity<String> saveFoodEntry(
+            @RequestBody FoodEntryDTO foodEntryDTO,
+            @RequestParam(required = false) Long userId,
+            HttpSession session) {
         try {
-            Long userId = (Long) session.getAttribute("userId");
-            if (userId == null) {
-                return ResponseEntity.status(401).build(); // User is not logged in
+            Long effectiveUserId = (userId != null) ? userId : (Long) session.getAttribute("userId");
+            if (effectiveUserId == null) {
+                return ResponseEntity.status(401).build(); // User not logged in or ID not provided
             }
-            foodEntryDTO.setUser(userService.findById(userId));
+            foodEntryDTO.setUser(userService.findById(effectiveUserId));
             foodEntryDTO.setEntryDate(LocalDateTime.now());
             foodEntryService.validateFoodEntry(foodEntryDTO);
             foodEntryService.save(foodEntryDTO);

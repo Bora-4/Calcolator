@@ -67,11 +67,16 @@ class NavigationManager {
                         })
                         .then(data => {
                             alert(data.message);
-                            window.location.href = "/dashboard";
+                            if (data.role === "admin") {
+                                window.location.href = "/admin";
+                            }
+                            else {
+                                window.location.href = "/dashboard";
+                            }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            alert('An error occurred. Please try again.');
+                            alert(error);
                         });
                 });
             }

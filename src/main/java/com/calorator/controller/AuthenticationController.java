@@ -30,6 +30,14 @@ public class AuthenticationController {
         return "dashboard";
     }
 
+    @GetMapping("/admin")
+    public String admin(HttpSession session) {
+        if (session.getAttribute("userId") == null) {
+            return "redirect:/login";
+        }
+        return "admin";
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
