@@ -1,3 +1,4 @@
+
 package com.calorator.entity;
 
 import jakarta.persistence.*;
