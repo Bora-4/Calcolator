@@ -73,6 +73,46 @@ function fetchEntries(startDate, endDate) {
         });
 }
 
+
+document.getElementById('foodEntryForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const foodName = document.getElementById('foodName').value;
+    const calories = document.getElementById('calories').value;
+    const price = document.getElementById('price').value;
+
+    const foodEntry = {
+        foodName: foodName,
+        calories: calories,
+        price: price
+    };
+
+    fetch('/food-entries/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(foodEntry)
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+
+                return response.json().then((errorData) => {
+                    throw new Error(errorData.message || "An error occurred.");
+                });
+            }
+        })
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:',error);
+            alert(error.message);
+        });
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("filterForm");
     const today = new Date().toISOString().split("T")[0];
