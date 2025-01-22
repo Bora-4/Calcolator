@@ -3,25 +3,34 @@ package com.calorator.mapper;
 import com.calorator.dto.CalorieThresholdDTO;
 import com.calorator.entity.CalorieThresholdEntity;
 import com.calorator.entity.UserEntity;
-import org.springframework.stereotype.Component;
 
-@Component
+
 public class CalorieThresholdMapper {
 
-    public CalorieThresholdEntity toEntity(CalorieThresholdDTO dto, UserEntity user) {
-        CalorieThresholdEntity entity = new CalorieThresholdEntity();
-        entity.setThresholdId(dto.getThresholdId());
-        entity.setUser(user);
-        entity.setThresholdDate(dto.getThresholdDate());
-        entity.setTotalCalories(dto.getTotalCalories());
-        entity.setWarningTriggered(dto.isWarningTriggered());
-        entity.setCalorieLimit(dto.getCalorieLimit());
-        entity.setCreatedAt(dto.getCreatedAt());
-        entity.setUpdatedAt(dto.getUpdatedAt());
-        return entity;
+    private CalorieThresholdMapper(){
+        //private constructor
     }
 
-    public CalorieThresholdDTO toDTO(CalorieThresholdEntity entity) {
+    public static CalorieThresholdEntity toEntity(CalorieThresholdDTO thresholdDTO, UserEntity user) {
+        if(thresholdDTO == null || user == null){
+            throw new NullPointerException("CalorieThresholdDTO or UserEntity must not be empty.");
+        }
+        CalorieThresholdEntity thresholdEntity = new CalorieThresholdEntity();
+        thresholdEntity.setThresholdId(thresholdDTO.getThresholdId());
+        thresholdEntity.setUser(user);
+        thresholdEntity.setThresholdDate(thresholdDTO.getThresholdDate());
+        thresholdEntity.setTotalCalories(thresholdDTO.getTotalCalories());
+        thresholdEntity.setWarningTriggered(thresholdDTO.isWarningTriggered());
+        thresholdEntity.setCalorieLimit(thresholdDTO.getCalorieLimit());
+        thresholdEntity.setCreatedAt(thresholdDTO.getCreatedAt());
+        thresholdEntity.setUpdatedAt(thresholdDTO.getUpdatedAt());
+        return thresholdEntity;
+    }
+
+    public static CalorieThresholdDTO toDTO(CalorieThresholdEntity entity) {
+        if( entity == null){
+            throw new NullPointerException("CalorieThresholdEntity must not be nulll.");
+        }
         CalorieThresholdDTO dto = new CalorieThresholdDTO();
         dto.setThresholdId(entity.getThresholdId());
         dto.setThresholdDate(entity.getThresholdDate());
