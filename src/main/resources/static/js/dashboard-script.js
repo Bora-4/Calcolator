@@ -243,7 +243,6 @@ function viewWeeklySummary(normalizedData) {
         return;
     }
 
-    // Aggregate calories and calculate total expenditure for the week
     const dayMap = entries.reduce((map, entry) => {
         const day = new Date(entry.entryDate).toLocaleDateString('en-US', { weekday: 'long' }); // Get day name
         if (!map[day]) {
@@ -254,49 +253,65 @@ function viewWeeklySummary(normalizedData) {
         return map;
     }, {});
 
-    const aggregatedDays = Object.keys(dayMap).map(day => ({
-        day,
-        calories: dayMap[day].calories,
-        thresholdExceeded: dayMap[day].calories > 2500,
-    }));
-
-    // Calculate total expenditure
     const totalExpenditure = entries.reduce((sum, entry) => sum + (entry.price || 0), 0);
 
-    // Render the table
     let tableBody = document.getElementById('weeklySummaryTableBody');
     tableBody.innerHTML = '';
 
     let totalCalories = 0;
     let daysExceeded = 0;
 
-    aggregatedDays.forEach((entry) => {
-        let row = document.createElement('tr');
+    const aggregatedDays = Object.keys(dayMap).map(day => {
+        const dayData = dayMap[day];
 
-        let dayCell = document.createElement('td');
-        dayCell.textContent = entry.day || "Unknown";
-        row.appendChild(dayCell);
-
-        let caloriesCell = document.createElement('td');
-        caloriesCell.textContent = entry.calories || 0;
-        row.appendChild(caloriesCell);
-
-        let exceededCell = document.createElement('td');
-        exceededCell.textContent = entry.thresholdExceeded ? 'Yes' : 'No';
-        row.appendChild(exceededCell);
-
-        tableBody.appendChild(row);
-
-        totalCalories += entry.calories || 0;
-        if (entry.thresholdExceeded) daysExceeded++;
+        const dateInMillis = new Date(dayData.entries[0].entryDate).getTime(); // Get date in milliseconds
+        return fetch(`/calorie-threshold/${dateInMillis}/exceeded`)
+            .then(response => response.json())
+            .then(isThresholdExceeded => ({
+                day,
+                calories: dayData.calories,
+                thresholdExceeded: isThresholdExceeded,
+            }))
+            .catch(error => {
+                console.error('Error:', error.message);
+                return {
+                    day,
+                    calories: dayData.calories,
+                    thresholdExceeded: false, // Fallback if there's an error
+                };
+            });
     });
 
-    // Update summary elements
-    document.getElementById('totalCaloriesWeek').textContent = totalCalories;
-    document.getElementById('thresholdExceededDays').textContent = daysExceeded;
-    document.getElementById('totalExpenditureWeek').textContent = totalExpenditure.toFixed(2) + ' €';
+    Promise.all(aggregatedDays)
+        .then(aggregatedResults => {
+            // Populate table with results
+            aggregatedResults.forEach(entry => {
+                let row = document.createElement('tr');
 
-    document.getElementById('weeklySummaryModal').style.display = 'block';
+                let dayCell = document.createElement('td');
+                dayCell.textContent = entry.day || "Unknown";
+                row.appendChild(dayCell);
+
+                let caloriesCell = document.createElement('td');
+                caloriesCell.textContent = entry.calories || 0;
+                row.appendChild(caloriesCell);
+
+                let exceededCell = document.createElement('td');
+                exceededCell.textContent = entry.thresholdExceeded ? 'Yes' : 'No';
+                row.appendChild(exceededCell);
+
+                tableBody.appendChild(row);
+
+                totalCalories += entry.calories || 0;
+                if (entry.thresholdExceeded) daysExceeded++;
+            });
+
+            document.getElementById('totalCaloriesWeek').textContent = totalCalories;
+            document.getElementById('thresholdExceededDays').textContent = daysExceeded;
+            document.getElementById('totalExpenditureWeek').textContent = totalExpenditure.toFixed(2) + ' €';
+
+            document.getElementById('weeklySummaryModal').style.display = 'block';
+        });
 }
 
 
