@@ -8,6 +8,18 @@ Aplikacion për të monitoruar kaloritë dhe shpenzimet mujore të ushqimit. Pro
 - **Backend:** Java, Spring Boot, MySQL
 - **Frontend:** HTML, JavaScript, CSS
 
+### Databaza
+
+Backend-i i këtij projekti përdor MySQL për menaxhimin e një sistemi databaze relacionale. Databaza ruan tërë të dhënat për user-in, food entries, kaloritë dhe shpenzimet. Databaza është dizenjuar për të suportuar marrjen e të dhënave (data retrieval) dhe manipulimin e regjistrimeve të kalorive dhe shpenzimeve. 
+
+**EER Diagram**
+
+![image](https://github.com/user-attachments/assets/22dcff50-b93e-4fd6-9066-bdcd4aec139f)
+
+Download Script File për krijimin e databazës këtu ➡
+[Uploading calorator_DB.sql…]()
+
+
 ### Arkitektura e përdorur:
 
 Në këtë projekt është përdorur arkitektura **Model-View-Controller (MVC)** për të siguruar një ndarje të qartë të përgjegjësive dhe për të përmirësuar mundësinë e mirëmbajtjes. Modeli menaxhon logjikën e aplikacionit, si llogaritjet e kalorive, profilin e përdoruesit dhe menaxhimin e të dhënave. Pamja (View) është përgjegjëse për paraqitjen e të dhënave tek përdoruesi, duke siguruar një ndërfaqe të përdorueshme për gjurmimin e kalorive dhe vendosjen e qëllimeve. Kontrolluesi (Controller) vepron si ndërmjetës, duke përpunuar input-et e përdoruesit nga View, duke përditësuar Modelin dhe kthyer të dhënat e përditësuara në View. Kjo arkitekturë promovon modularitetin, duke e bërë më të lehtë implementimin e veçorive të reja, riparimin e problemeve dhe përshtatjen e aplikacionit me kërkesa të ardhshme.
