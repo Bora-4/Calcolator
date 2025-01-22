@@ -17,7 +17,7 @@ Backend-i i këtij projekti përdor MySQL për menaxhimin e një sistemi databaz
 ![image](https://github.com/user-attachments/assets/22dcff50-b93e-4fd6-9066-bdcd4aec139f)
 
 Download Script File për krijimin e databazës këtu ➡
-([Uploading calorator_DB.sql…]())
+[Uploading calorator_DB.sql…]()
 
 
 ### Arkitektura e përdorur:
