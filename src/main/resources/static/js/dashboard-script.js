@@ -144,14 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-function openModal() {
-    document.getElementById('foodEntryModal').style.display = "block";
-}
-
-function closeModal() {
-    document.getElementById('foodEntryModal').style.display = "none";
-}
-
 document.getElementById('viewWeeklySummaryButton').addEventListener('click', function() {
     let weeklyData = [
         { day: 'Monday', calories: 2500, thresholdExceeded: true },
