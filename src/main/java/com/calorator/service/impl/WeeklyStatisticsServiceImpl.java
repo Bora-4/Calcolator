@@ -27,8 +27,10 @@ public class WeeklyStatisticsServiceImpl implements WeeklyStatisticsService {
 
     @Override
     public WeeklyStatisticsDTO createWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO, Long reportId) {
-        ReportEntity report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("Report not found with ID: " + reportId));
+        ReportEntity report = reportRepository.findById(reportId);
+        if (report == null) {
+            throw new IllegalArgumentException("Report not found with ID: " + reportId);
+        }
 
         WeeklyStatisticsEntity entity = WeeklyStatisticsMapper.toEntity(weeklyStatisticsDTO, report);
         entity = weeklyStatisticsRepository.save(entity);
