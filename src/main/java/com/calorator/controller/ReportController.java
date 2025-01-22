@@ -52,7 +52,11 @@ public class ReportController {
 
     @GetMapping
     public ResponseEntity<List<ReportDTO>> findAllReports() {
-        return ResponseEntity.ok(reportService.findAll());
+        try {
+            return ResponseEntity.ok(reportService.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @GetMapping("id/{id}")
