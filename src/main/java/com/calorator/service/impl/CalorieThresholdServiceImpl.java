@@ -23,13 +23,11 @@ public class CalorieThresholdServiceImpl implements CalorieThresholdService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CalorieThresholdMapper calorieThresholdMapper;
 
     @Override
     public CalorieThresholdDTO getThresholdByUserIdAndDate(Long userId, Date date) {
         CalorieThresholdEntity entity = calorieThresholdRepository.findByUserIdAndDate(userId, date);
-        return entity != null ? calorieThresholdMapper.toDTO(entity) : null;
+        return entity != null ? CalorieThresholdMapper.toDTO(entity) : null;
     }
 
     @Override
@@ -37,9 +35,9 @@ public class CalorieThresholdServiceImpl implements CalorieThresholdService {
 
         UserEntity user = userRepository.findById(thresholdDTO.getUser().getId());
 
-        CalorieThresholdEntity threshold = calorieThresholdMapper.toEntity(thresholdDTO, user);
+        CalorieThresholdEntity threshold = CalorieThresholdMapper.toEntity(thresholdDTO, user);
         threshold = calorieThresholdRepository.save(threshold);
-        return calorieThresholdMapper.toDTO(threshold);
+        return CalorieThresholdMapper.toDTO(threshold);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class CalorieThresholdServiceImpl implements CalorieThresholdService {
         if (threshold == null) {
             threshold = new CalorieThresholdEntity();
             threshold.setUser(user);
-            threshold.setThresholdDate(new Date());
+            threshold.setThresholdDate(date);
             threshold.setTotalCalories(calories);
             threshold.setWarningTriggered(false);
         } else {

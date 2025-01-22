@@ -24,18 +24,25 @@ public class AuthenticationController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session) {
-        if (session.getAttribute("userId") == null) {
+        if (session.getAttribute("userId") == null && session.getAttribute("role") == null) {
             return "redirect:/login";
+        } else if (session.getAttribute("role").equals("user")) {
+            return "dashboard";
+        } else {
+            return "redirect:/admin";
         }
-        return "dashboard";
     }
 
     @GetMapping("/admin")
     public String admin(HttpSession session) {
-        if (session.getAttribute("userId") == null) {
+        if (session.getAttribute("userId") == null && session.getAttribute("role") == null) {
             return "redirect:/login";
+        } else if (session.getAttribute("role").equals("admin")) {
+            return "admin";
+        } else {
+            return "redirect:/dashboard";
+
         }
-        return "admin";
     }
 
     @GetMapping("/logout")

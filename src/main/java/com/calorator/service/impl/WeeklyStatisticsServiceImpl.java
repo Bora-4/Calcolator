@@ -11,6 +11,7 @@ import com.calorator.mapper.ReportMapper;
 import com.calorator.mapper.UserMapper;
 import com.calorator.repository.WeeklyStatisticsRepository;
 import com.calorator.service.WeeklyStatisticsService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,73 +29,47 @@ public class WeeklyStatisticsServiceImpl implements WeeklyStatisticsService {
     }
 
     @Override
-    public WeeklyStatisticsDTO createWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO, Long reportId) {
-        return null;
-    }
-
-    @Override
-    public WeeklyStatisticsDTO updateWeeklyStatistics(Long id, WeeklyStatisticsDTO weeklyStatisticsDTO) {
-        return null;
-    }
-
-    @Override
-    public WeeklyStatisticsDTO getWeeklyStatisticsById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<WeeklyStatisticsDTO> getAllWeeklyStatistics() {
-        return List.of();
-    }
-
-    @Override
     public void saveWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO) {
-        // Convert the ReportDTO to ReportEntity
-        ReportDTO reportDTO = weeklyStatisticsDTO.getReportDTO();
-        UserDTO userDTO = reportDTO.getAdmin();  // Assuming the Report has a User as Admin
+        UserDTO userDTO = weeklyStatisticsDTO.getReportDTO().getAdmin();
         UserEntity userEntity = UserMapper.toEntity(userDTO);
-        ReportEntity reportEntity = ReportMapper.toEntity(reportDTO, userEntity);
-
-        // Map WeeklyStatisticsDTO to Entity
+        ReportEntity reportEntity = ReportMapper.toEntity(weeklyStatisticsDTO.getReportDTO(), userEntity);
         WeeklyStatisticsEntity entity = WeeklyStatisticsMapper.toEntity(weeklyStatisticsDTO, reportEntity);
         weeklyStatisticsRepository.save(entity);
     }
 
     @Override
-    public void updateWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO) {
-        // Convert the ReportDTO to ReportEntity
-        ReportDTO reportDTO = weeklyStatisticsDTO.getReportDTO();
-        UserDTO userDTO = reportDTO.getAdmin();
-        UserEntity userEntity = UserMapper.toEntity(userDTO);
-        ReportEntity reportEntity = ReportMapper.toEntity(reportDTO, userEntity);
-
-        // Map WeeklyStatisticsDTO to Entity and update
-        WeeklyStatisticsEntity entity = WeeklyStatisticsMapper.toEntity(weeklyStatisticsDTO, reportEntity);
-        weeklyStatisticsRepository.update(entity);
-    }
-
-    @Override
-    public void deleteWeeklyStatistics(Long statisticId) {
-        weeklyStatisticsRepository.delete(statisticId);
-    }
-
-    @Override
     public WeeklyStatisticsDTO findWeeklyStatisticsById(Long statisticId) {
         WeeklyStatisticsEntity entity = weeklyStatisticsRepository.findById(statisticId);
-        return WeeklyStatisticsMapper.toDTO(entity);
+        if (entity != null) {
+            return WeeklyStatisticsMapper.toDTO(entity);
+        }
+        throw new EntityNotFoundException("WeeklyStatistics with id " + statisticId + " was not found.");
     }
 
     @Override
     public List<WeeklyStatisticsDTO> findAllWeeklyStatistics() {
         return weeklyStatisticsRepository.findAll().stream()
                 .map(WeeklyStatisticsMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
-    public WeeklyStatisticsDTO findWeeklyStatisticsByStatisticName(String statisticName) {
-        return weeklyStatisticsRepository.findByStatisticName(statisticName)
-                .map(WeeklyStatisticsMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("WeeklyStatistics with name " + statisticName + " not found"));
+    public void updateWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO) {
+        WeeklyStatisticsEntity existingWeeklyStatistics = weeklyStatisticsRepository.findById(weeklyStatisticsDTO.getId());
+        if (existingWeeklyStatistics != null) {
+            WeeklyStatisticsEntity updatedWeeklyStatistics = WeeklyStatisticsMapper.toEntity(weeklyStatisticsDTO, existingWeeklyStatistics.getReport());
+            weeklyStatisticsRepository.update(updatedWeeklyStatistics);
+        } else {
+            throw new EntityNotFoundException("WeeklyStatistics with id " + weeklyStatisticsDTO.getId() + " was not found.");
+        }
+    }
+
+    @Override
+    public void deleteWeeklyStatistics(Long id) {
+        WeeklyStatisticsEntity weeklyStatisticsEntity = weeklyStatisticsRepository.findById(id);
+        if (weeklyStatisticsEntity == null) {
+            throw new EntityNotFoundException("WeeklyStatistics with id " + id + " was not found.");
+        }
+        weeklyStatisticsRepository.delete(id);
     }
 }
