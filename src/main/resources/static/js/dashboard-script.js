@@ -84,7 +84,7 @@ document.getElementById('foodEntryForm').addEventListener('submit', function(eve
         price: price
     };
 
-    fetch('/food-entries/save', {
+fetch('/food-entries/save', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -108,8 +108,26 @@ document.getElementById('foodEntryForm').addEventListener('submit', function(eve
             console.error('Error:',error);
             alert(error.message);
         });
-});
 
+    const dateInMillis = new Date().getTime();
+    fetch(`/calorie-threshold/${dateInMillis}/exceeded`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(isThresholdExceeded => {
+            if (isThresholdExceeded) {
+                alert("Warning: Your calorie threshold for today has been exceeded!");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            alert("An error occurred while checking the calorie threshold. Please try again later.");
+        });
+
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("filterForm");
