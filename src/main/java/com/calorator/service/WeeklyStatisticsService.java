@@ -5,23 +5,10 @@ import java.util.List;
 
 public interface WeeklyStatisticsService {
 
-    WeeklyStatisticsDTO createWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO, Long reportId);
-
-    WeeklyStatisticsDTO updateWeeklyStatistics(Long id, WeeklyStatisticsDTO weeklyStatisticsDTO);
-
-    WeeklyStatisticsDTO getWeeklyStatisticsById(Long id);
-
-    List<WeeklyStatisticsDTO> getAllWeeklyStatistics();
-
     void saveWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO);
-
-    void updateWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO);
-
+    WeeklyStatisticsDTO findWeeklyStatisticsById(Long id);
+    List<WeeklyStatisticsDTO> findAllWeeklyStatistics();
+    void updateWeeklyStatistics( WeeklyStatisticsDTO weeklyStatisticsDTO);
     void deleteWeeklyStatistics(Long id);
 
-    WeeklyStatisticsDTO findWeeklyStatisticsById(Long statisticId);
-
-    List<WeeklyStatisticsDTO> findAllWeeklyStatistics();
-
-    WeeklyStatisticsDTO findWeeklyStatisticsByStatisticName(String statisticName);
 }
