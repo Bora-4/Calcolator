@@ -60,9 +60,17 @@ public class FoodEntryController {
     }
 
     @GetMapping("/last-7-days")
-    public ResponseEntity<List<FoodEntryDTO>> getLast7DaysEntries() {
-        List<FoodEntryDTO> foodEntries = foodEntryService.findFoodEntriesLast7Days();
-        return ResponseEntity.ok(foodEntries);
+    public ResponseEntity<List<FoodEntryDTO>> getLast7DaysEntries(HttpSession session) {
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return ResponseEntity.status(401).build();
+            }
+            List<FoodEntryDTO> foodEntries = foodEntryService.findFoodEntriesLast7Days(userId);
+            return ResponseEntity.ok(foodEntries);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/last-7-days/count")

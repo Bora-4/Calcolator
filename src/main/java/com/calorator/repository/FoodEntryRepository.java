@@ -11,7 +11,7 @@ import java.util.List;
 public interface FoodEntryRepository {
     void save(FoodEntryEntity foodEntry);
     FoodEntryEntity findById(Long id);
-    List<FoodEntryEntity> findFoodEntriesLast7Days();
+    List<FoodEntryEntity> findFoodEntriesLast7Days(long userId);
     Long countFoodEntriesLast7Days();
     void update(FoodEntryEntity foodEntry);
     List<FoodEntryEntity> findAll();

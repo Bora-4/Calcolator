@@ -27,13 +27,14 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     }
 
     @Override
-    public List<FoodEntryEntity> findFoodEntriesLast7Days() {
+    public List<FoodEntryEntity> findFoodEntriesLast7Days(long userId) {
         try {
             LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
             return em.createQuery(
-                            "SELECT f FROM FoodEntryEntity f WHERE f.entryDate >= :sevenDaysAgo",
+                            "SELECT f FROM FoodEntryEntity f WHERE f.user.id = :userId AND f.entryDate >= :sevenDaysAgo",
                             FoodEntryEntity.class
                     )
+                    .setParameter("userId", userId)
                     .setParameter("sevenDaysAgo", sevenDaysAgo)
                     .getResultList();
         } catch (Exception e) {
