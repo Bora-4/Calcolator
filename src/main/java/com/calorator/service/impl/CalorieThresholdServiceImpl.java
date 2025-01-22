@@ -51,7 +51,7 @@ public class CalorieThresholdServiceImpl implements CalorieThresholdService {
         if (threshold == null) {
             threshold = new CalorieThresholdEntity();
             threshold.setUser(user);
-            threshold.setThresholdDate(new Date());
+            threshold.setThresholdDate(date);
             threshold.setTotalCalories(calories);
             threshold.setWarningTriggered(false);
         } else {
