@@ -28,9 +28,6 @@ public class CalorieThresholdEntity {
     @Column(name = "is_warning_triggered")
     private boolean isWarningTriggered;
 
-    @Column(name = "calorie_limit")
-    private int calorieLimit;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -76,14 +73,6 @@ public class CalorieThresholdEntity {
 
     public void setWarningTriggered(boolean warningTriggered) {
         isWarningTriggered = warningTriggered;
-    }
-
-    public int getCalorieLimit() {
-        return calorieLimit;
-    }
-
-    public void setCalorieLimit(int calorieLimit) {
-        this.calorieLimit = calorieLimit;
     }
 
     public LocalDateTime getCreatedAt() {

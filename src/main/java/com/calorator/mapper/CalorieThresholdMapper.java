@@ -21,7 +21,6 @@ public class CalorieThresholdMapper {
         thresholdEntity.setThresholdDate(thresholdDTO.getThresholdDate());
         thresholdEntity.setTotalCalories(thresholdDTO.getTotalCalories());
         thresholdEntity.setWarningTriggered(thresholdDTO.isWarningTriggered());
-        thresholdEntity.setCalorieLimit(thresholdDTO.getCalorieLimit());
         thresholdEntity.setCreatedAt(thresholdDTO.getCreatedAt());
         thresholdEntity.setUpdatedAt(thresholdDTO.getUpdatedAt());
         return thresholdEntity;
@@ -36,7 +35,6 @@ public class CalorieThresholdMapper {
         dto.setThresholdDate(entity.getThresholdDate());
         dto.setTotalCalories(entity.getTotalCalories());
         dto.setWarningTriggered(entity.isWarningTriggered());
-        dto.setCalorieLimit(entity.getCalorieLimit());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
 
