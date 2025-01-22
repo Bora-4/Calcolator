@@ -13,5 +13,15 @@ public interface WeeklyStatisticsService {
 
     List<WeeklyStatisticsDTO> getAllWeeklyStatistics();
 
+    void saveWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO);
+
+    void updateWeeklyStatistics(WeeklyStatisticsDTO weeklyStatisticsDTO);
+
     void deleteWeeklyStatistics(Long id);
+
+    WeeklyStatisticsDTO findWeeklyStatisticsById(Long statisticId);
+
+    List<WeeklyStatisticsDTO> findAllWeeklyStatistics();
+
+    WeeklyStatisticsDTO findWeeklyStatisticsByStatisticName(String statisticName);
 }
