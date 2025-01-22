@@ -153,49 +153,7 @@ function closeModal() {
 }
 
 document.getElementById('viewWeeklySummaryButton').addEventListener('click', function() {
-    let weeklyData = [
-        { day: 'Monday', calories: 2500, thresholdExceeded: true },
-        { day: 'Tuesday', calories: 2000, thresholdExceeded: false },
-        { day: 'Wednesday', calories: 3000, thresholdExceeded: true },
-        { day: 'Thursday', calories: 2200, thresholdExceeded: false },
-        { day: 'Friday', calories: 2700, thresholdExceeded: true },
-        { day: 'Saturday', calories: 1900, thresholdExceeded: false },
-        { day: 'Sunday', calories: 3100, thresholdExceeded: true },
-    ];
-
-    let tableBody = document.getElementById('weeklySummaryTableBody');
-    let totalCalories = 0;
-    let totalExpenditure = 0;
-    let daysExceeded = 0;
-
-    tableBody.innerHTML = '';
-    weeklyData.forEach((data) => {
-        let row = document.createElement('tr');
-
-        let dayCell = document.createElement('td');
-        dayCell.textContent = data.day;
-        row.appendChild(dayCell);
-
-        let caloriesCell = document.createElement('td');
-        caloriesCell.textContent = data.calories;
-        row.appendChild(caloriesCell);
-
-        let exceededCell = document.createElement('td');
-        exceededCell.textContent = data.thresholdExceeded ? 'Yes' : 'No';
-        row.appendChild(exceededCell);
-
-        tableBody.appendChild(row);
-
-        totalCalories += data.calories;
-        if (data.thresholdExceeded) daysExceeded++;
-        totalExpenditure += (data.calories * 0.05);
-    });
-
-    document.getElementById('totalCaloriesWeek').textContent = totalCalories;
-    document.getElementById('thresholdExceededDays').textContent = daysExceeded;
-    document.getElementById('totalExpenditureWeek').textContent = totalExpenditure.toFixed(2);
-
-    document.getElementById('weeklySummaryModal').style.display = 'block';
+    last7DaysEntries();
 });
 
 document.getElementById('closeWeeklySummaryModal').addEventListener('click', function() {
@@ -246,3 +204,89 @@ function updateOverview(data) {
 document.addEventListener("DOMContentLoaded", () => {
     fetchTodayEntries();
 });
+
+function last7DaysEntries() {
+    showMessage("Loading...");
+
+    fetch(`food-entries/last-7-days`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const normalizedData = Array.isArray(data) ? { entries: data } : data;
+            viewWeeklySummary(normalizedData);
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            showMessage("An error occurred while fetching data. Please try again later.");
+        });
+}
+
+function viewWeeklySummary(normalizedData) {
+    const entries = Array.isArray(normalizedData.entries) ? normalizedData.entries : [];
+
+    if (!entries.length) {
+        console.warn("No valid entries found:", normalizedData);
+        return;
+    }
+
+    // Aggregate calories and calculate total expenditure for the week
+    const dayMap = entries.reduce((map, entry) => {
+        const day = new Date(entry.entryDate).toLocaleDateString('en-US', { weekday: 'long' }); // Get day name
+        if (!map[day]) {
+            map[day] = { calories: 0, entries: [] };
+        }
+        map[day].calories += entry.calories || 0;
+        map[day].entries.push(entry);
+        return map;
+    }, {});
+
+    const aggregatedDays = Object.keys(dayMap).map(day => ({
+        day,
+        calories: dayMap[day].calories,
+        thresholdExceeded: dayMap[day].calories > 2500,
+    }));
+
+    // Calculate total expenditure
+    const totalExpenditure = entries.reduce((sum, entry) => sum + (entry.price || 0), 0);
+
+    // Render the table
+    let tableBody = document.getElementById('weeklySummaryTableBody');
+    tableBody.innerHTML = '';
+
+    let totalCalories = 0;
+    let daysExceeded = 0;
+
+    aggregatedDays.forEach((entry) => {
+        let row = document.createElement('tr');
+
+        let dayCell = document.createElement('td');
+        dayCell.textContent = entry.day || "Unknown";
+        row.appendChild(dayCell);
+
+        let caloriesCell = document.createElement('td');
+        caloriesCell.textContent = entry.calories || 0;
+        row.appendChild(caloriesCell);
+
+        let exceededCell = document.createElement('td');
+        exceededCell.textContent = entry.thresholdExceeded ? 'Yes' : 'No';
+        row.appendChild(exceededCell);
+
+        tableBody.appendChild(row);
+
+        totalCalories += entry.calories || 0;
+        if (entry.thresholdExceeded) daysExceeded++;
+    });
+
+    // Update summary elements
+    document.getElementById('totalCaloriesWeek').textContent = totalCalories;
+    document.getElementById('thresholdExceededDays').textContent = daysExceeded;
+    document.getElementById('totalExpenditureWeek').textContent = totalExpenditure.toFixed(2) + ' €';
+
+    document.getElementById('weeklySummaryModal').style.display = 'block';
+}
+
+
