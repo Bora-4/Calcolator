@@ -12,7 +12,7 @@ public interface FoodEntryService {
 
     public FoodEntryDTO findById(Long id);
 
-    public List<FoodEntryDTO> findFoodEntriesLast7Days();
+    public List<FoodEntryDTO> findFoodEntriesLast7Days(long userId);
 
     public Long countFoodEntriesLast7Days();
 

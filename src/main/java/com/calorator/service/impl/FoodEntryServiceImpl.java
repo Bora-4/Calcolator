@@ -56,8 +56,11 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public List<FoodEntryDTO> findFoodEntriesLast7Days() {
-        List<FoodEntryEntity> foodEntries = foodEntryRepository.findFoodEntriesLast7Days();
+    public List<FoodEntryDTO> findFoodEntriesLast7Days(long userId) {
+        if (userId <= 0) {
+            throw new IllegalArgumentException("userId must be a positive value.");
+        }
+        List<FoodEntryEntity> foodEntries = foodEntryRepository.findFoodEntriesLast7Days(userId);
         return foodEntries.stream()
                 .map(FoodEntryMapper::toDTO)
                 .collect(Collectors.toList());
