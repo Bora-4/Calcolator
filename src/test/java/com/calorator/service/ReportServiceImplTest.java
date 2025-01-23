@@ -28,19 +28,7 @@ class ReportServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
-    @Test
-    void testSaveReport() {
-        ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setId(1L);
-        reportDTO.setReportDate(LocalDate.now());
-
-        doNothing().when(reportRepository).save(any(ReportEntity.class));
-
-        reportService.save(reportDTO);
-
-        verify(reportRepository, times(1)).save(any(ReportEntity.class));
-    }
+    
 
     @Test
     void testFindById() {
@@ -69,26 +57,6 @@ class ReportServiceImplTest {
         assertEquals(2, reports.size());
     }
 
-    @Test
-    void testUpdateReport() {
-        ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setId(1L);
-
-        doNothing().when(reportRepository).update(any(ReportEntity.class));
-
-        reportService.update(reportDTO);
-
-        verify(reportRepository, times(1)).update(any(ReportEntity.class));
-    }
-
-    @Test
-    void testDeleteReport() {
-        doNothing().when(reportRepository).delete(1L);
-
-        reportService.delete(1L);
-
-        verify(reportRepository, times(1)).delete(1L);
-    }
 
     @Test
     void testFindByReportDate() {

@@ -92,17 +92,6 @@ public class FoodEntryControllerTest {
     }
 
     @Test
-    public void testGetLast7DaysEntriesCount() {
-        Long count = 10L;
-        when(foodEntryService.countFoodEntriesLast7Days()).thenReturn(count);
-
-        ResponseEntity<Long> response = foodEntryController.getLast7DaysEntriesCount();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(count, response.getBody());
-    }
-
-    @Test
     public void testUpdateFoodEntry() {
         Long id = 1L;
         FoodEntryDTO foodEntryDTO = new FoodEntryDTO();

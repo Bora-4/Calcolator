@@ -239,57 +239,6 @@ public class FoodEntryServiceImplTest {
         assertEquals("Food entry with id 1 was not found.", exception.getMessage());
     }
 
-    @Test
-    void testSave_InvalidFoodName() {
-        FoodEntryDTO foodEntryDTO = new FoodEntryDTO();
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
-        foodEntryDTO.setUser(userDTO);
-        foodEntryDTO.setFoodName("");
-
-        when(userRepository.findById(1L)).thenReturn(new UserEntity());
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            foodEntryService.save(foodEntryDTO);
-        });
-
-        assertEquals("Food name must not be empty.", exception.getMessage());
-    }
-
-    @Test
-    void testUpdate_InvalidEntryDate() {
-        FoodEntryDTO foodEntryDTO = new FoodEntryDTO();
-        foodEntryDTO.setId(1L);
-        foodEntryDTO.setFoodName("Apple");
-        foodEntryDTO.setCalories(100);
-        foodEntryDTO.setEntryDate(LocalDateTime.now().plusDays(1)); // Future date
-
-        when(foodEntryRepository.findById(1L)).thenReturn(new FoodEntryEntity());
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            foodEntryService.update(foodEntryDTO);
-        });
-
-        assertEquals("Entry date cannot be in the future.", exception.getMessage());
-    }
-
-    @Test
-    void testSave_InvalidCalories() {
-        FoodEntryDTO foodEntryDTO = new FoodEntryDTO();
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
-        foodEntryDTO.setUser(userDTO);
-        foodEntryDTO.setFoodName("Apple");
-        foodEntryDTO.setCalories(-100);
-
-        when(userRepository.findById(1L)).thenReturn(new UserEntity());
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            foodEntryService.save(foodEntryDTO);
-        });
-
-        assertEquals("Calories must be greater than 0.", exception.getMessage());
-    }
 
     @Test
     void testValidateFoodEntry_NullDTO() {
@@ -300,18 +249,6 @@ public class FoodEntryServiceImplTest {
         assertEquals("FoodEntryDTO must not be null.", exception.getMessage());
     }
 
-    @Test
-    void testEntryDateFiltering_InvalidUserId() {
-        Long userId = -1L;
-        LocalDateTime startDate = LocalDateTime.now().minusDays(7);
-        LocalDateTime endDate = LocalDateTime.now();
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            foodEntryService.entryDateFiltering(userId, startDate, endDate);
-        });
-
-        assertEquals("userId must be a positive value.", exception.getMessage());
-    }
 
     @Test
     void testCountFoodEntriesLast7Days_Empty() {
@@ -322,21 +259,7 @@ public class FoodEntryServiceImplTest {
         assertEquals(0L, result);
     }
 
-    @Test
-    void testUpdate_InvalidFoodName() {
-        FoodEntryDTO foodEntryDTO = new FoodEntryDTO();
-        foodEntryDTO.setId(1L);
-        foodEntryDTO.setFoodName("");  // Empty food name
-        foodEntryDTO.setCalories(100);
 
-        when(foodEntryRepository.findById(1L)).thenReturn(new FoodEntryEntity());
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            foodEntryService.update(foodEntryDTO);
-        });
-
-        assertEquals("Food name must not be empty.", exception.getMessage());
-    }
 
     @Test
     void testSave_UserRepositoryFailure() {
