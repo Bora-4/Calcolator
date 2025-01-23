@@ -7,7 +7,14 @@ Aplikacion për të monitoruar kaloritë dhe shpenzimet mujore të ushqimit. Pro
 ### Teknologjitë e Përdorura:
 - **Backend:** Java, Spring Boot, MySQL
 - **Frontend:** HTML, JavaScript, CSS
-
+  
+### Anëtarët e grupit
+- Bora Rrena
+- Rei Gjuzi
+- Riona Fida
+- Katerina Kaloshi
+- Fabian Zerka
+  
 ### Databaza
 
 Backend-i i këtij projekti përdor MySQL për menaxhimin e një sistemi databaze relacionale. Databaza ruan tërë të dhënat për user-in, food entries, kaloritë dhe shpenzimet. Databaza është dizenjuar për të suportuar marrjen e të dhënave (data retrieval) dhe manipulimin e regjistrimeve të kalorive dhe shpenzimeve. 
