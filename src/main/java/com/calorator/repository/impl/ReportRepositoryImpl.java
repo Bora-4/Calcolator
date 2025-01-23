@@ -5,6 +5,7 @@ import com.calorator.repository.ReportRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,6 @@ public class ReportRepositoryImpl implements ReportRepository {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
     @Override
     public void save(ReportEntity reportEntity) {
         em.persist(reportEntity);
@@ -34,13 +34,23 @@ public class ReportRepositoryImpl implements ReportRepository {
                 .getResultList();
     }
 
-    @Transactional
+
     @Override
     public void update(ReportEntity reportEntity) {
         em.merge(reportEntity);
     }
 
-    @Transactional
+    @Override
+    public ReportEntity findByReportDate(String reportDate) {
+        try {
+            return em.createQuery("SELECT r FROM ReportEntity r WHERE r.reportDate = :reportDate", ReportEntity.class)
+                    .setParameter("reportDate", reportDate)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Override
     public void delete(Long id) {
         ReportEntity report = findById(id);
@@ -49,15 +59,7 @@ public class ReportRepositoryImpl implements ReportRepository {
         }
     }
 
-    @Override
-    public Optional<ReportEntity> findByReportDate(String reportDate) {
-        try {
-            ReportEntity report = em.createQuery("SELECT r FROM ReportEntity r WHERE r.reportDate = :reportDate", ReportEntity.class)
-                    .setParameter("reportDate", reportDate)
-                    .getSingleResult();
-            return Optional.of(report);
-        } catch (NoResultException e) {
-            throw new RuntimeException("Error while fetching report by date", e);
-        }
-    }
+
+
+
 }

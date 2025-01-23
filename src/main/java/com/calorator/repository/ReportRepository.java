@@ -17,6 +17,6 @@ public interface ReportRepository {
 
     void delete(Long id);
 
-    Optional<ReportEntity> findByReportDate(String reportDate);
+    ReportEntity findByReportDate(String reportDate);
 
 }
