@@ -40,12 +40,11 @@ function renderUserList(users) {
         chooseButton.addEventListener('click', () => {
             selectedUserId = user.id;
             console.log('User selected:', selectedUserId);
-            fetchUserFoodEntries( selectedUserId); // Fetch food entries for the selected user
+            fetchUserFoodEntries(selectedUserId); // Fetch food entries for the selected user
         });
         userList.appendChild(listItem);
     });
 }
-
 
 
 // Handle the search input to filter users
@@ -115,8 +114,8 @@ function renderFoodTable() {
 
     foodEntries.forEach((entry, index) => {
         const row = document.createElement('tr');
-if(entry.user.id=== selectedUserId){
-    row.innerHTML =`
+        if (entry.user.id === selectedUserId) {
+            row.innerHTML = `
             <td>${index + 1}</td>
             <td>${entry.foodName}</td>
             <td>${entry.calories}</td>
@@ -126,15 +125,12 @@ if(entry.user.id=== selectedUserId){
                 <button class="btn" onclick="deleteFoodEntry(${index})">Delete</button>
             </td>
         `;
-}
-
-
+        }
 
 
         tableBody.appendChild(row);
     });
 }
-
 
 
 // Other functions like addNewFoodEntry, editFoodEntry, deleteFoodEntry, and logout remain the same
@@ -186,50 +182,50 @@ async function addNewFoodEntry() {
 
 
 async function editFoodEntry(index) {
-const entry = foodEntries[index];
-const foodName = prompt('Enter food name:', entry.name);
-const calories = parseInt(prompt('Enter calories:', entry.calories), 10);
-const price = parseFloat(prompt('Enter price:', entry.price));
-const entryDate = entry.entryDate ? entry.entryDate : new Date().toISOString();  // Use the existing date or current date as fallback
+    const entry = foodEntries[index];
+    const foodName = prompt('Enter food name:', entry.name);
+    const calories = parseInt(prompt('Enter calories:', entry.calories), 10);
+    const price = parseFloat(prompt('Enter price:', entry.price));
+    const entryDate = entry.entryDate ? entry.entryDate : new Date().toISOString();  // Use the existing date or current date as fallback
 
-const userId = entry.user ? entry.user.id : null;
+    const userId = entry.user ? entry.user.id : null;
 
-if (foodName && !isNaN(calories) && !isNaN(price)) {
-    try {
-        const response = await fetch(`/food-entries/${entry.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: entry.id, // Ensure the ID is passed correctly
-                foodName: foodName,
-                calories: calories,
-                price: price,
-                entryDate: entryDate,
-                user: { id: userId }
-            }),
-        });
+    if (foodName && !isNaN(calories) && !isNaN(price)) {
+        try {
+            const response = await fetch(`/food-entries/${entry.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: entry.id, // Ensure the ID is passed correctly
+                    foodName: foodName,
+                    calories: calories,
+                    price: price,
+                    entryDate: entryDate,
+                    user: {id: userId}
+                }),
+            });
 
-        // Check if the response is ok and log it
-        const responseData = await response.json();  // Assuming the API sends a JSON response
-        console.log('Response:', responseData);
+            // Check if the response is ok and log it
+            const responseData = await response.json();  // Assuming the API sends a JSON response
+            console.log('Response:', responseData);
 
-        if (response.ok) {
-            foodEntries[index] = { id: entry.id, foodName, calories, price,entryDate,user: { id: userId } };
-            console.log('Updated foodEntries:', foodEntries);  // Log the updated foodEntries array
-            renderFoodTable();
-            alert('Food entry updated successfully!');
-        } else {
-            const errorData = await response.json();
-            alert(`Error: ${errorData.message}`);
+            if (response.ok) {
+                foodEntries[index] = {id: entry.id, foodName, calories, price, entryDate, user: {id: userId}};
+                console.log('Updated foodEntries:', foodEntries);  // Log the updated foodEntries array
+                renderFoodTable();
+                alert('Food entry updated successfully!');
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error updating food entry:', error);
         }
-    } catch (error) {
-        console.error('Error updating food entry:', error);
+    } else {
+        alert('Invalid input!');
     }
-} else {
-    alert('Invalid input!');
-}
 }
 
 // Delete a food entry
@@ -257,10 +253,38 @@ async function deleteFoodEntry(index) {
 const logoutBtn = document.getElementById('logout-btn');
 logoutBtn.addEventListener('click', async () => {
     try {
-        await fetch('/logout', { method: 'GET' });
+        await fetch('/logout', {method: 'GET'});
         window.location.href = '/home';
     } catch (error) {
         console.error('Error during logout:', error);
     }
 });
+
+function generateReport() {
+    event.preventDefault();
+
+    fetch('/reports', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || "An error occurred.");
+                });
+            }
+        })
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message);
+        });
+}
+
 
