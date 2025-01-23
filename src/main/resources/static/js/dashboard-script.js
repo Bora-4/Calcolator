@@ -127,6 +127,40 @@ fetch('/food-entries/save', {
             alert("An error occurred while checking the calorie threshold. Please try again later.");
         });
 
+    fetch('expenditure/get-Monthly-Expenditure', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("No expenditure data found for the given user and month.");
+                } else if (response.status === 400) {
+                    throw new Error("Bad request. Please check the input values.");
+                } else {
+                    throw new Error(`Unexpected error: ${response.statusText}`);
+                }
+            }
+            return response.json();
+        })
+        .then(monthlyExpenditure => {
+            console.log("Monthly Expenditure Data:", monthlyExpenditure);
+
+            // Assuming monthlyExpenditure has a 'total' field representing the total expenditure
+            if (monthlyExpenditure > 1000) {
+                alert("Monthly expenditure limit exceeded!");
+            }
+
+            // Handle the expenditure data (e.g., render it in the UI)
+        })
+        .catch(error => {
+            console.error("Error:", error.message);
+            alert(error.message);
+        });
+
+
 });
 
 document.addEventListener("DOMContentLoaded", () => {
