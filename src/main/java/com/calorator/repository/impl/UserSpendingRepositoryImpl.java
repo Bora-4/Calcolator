@@ -4,7 +4,6 @@ import com.calorator.entity.UserSpendingEntity;
 import com.calorator.repository.UserSpendingRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 public class UserSpendingRepositoryImpl implements UserSpendingRepository {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    public EntityManager entityManager;
 
     @Override
     public void save(UserSpendingEntity userSpendingEntity) {
@@ -41,7 +40,7 @@ public class UserSpendingRepositoryImpl implements UserSpendingRepository {
 
     @Override
     public List<UserSpendingEntity> findAll() {
-        String query = "SELECT u FROM UserSpendingEntity u";
-        return entityManager.createQuery(query, UserSpendingEntity.class).getResultList();
+        return entityManager.createQuery("SELECT u FROM UserSpendingEntity u", UserSpendingEntity.class)
+                .getResultList();
     }
 }
