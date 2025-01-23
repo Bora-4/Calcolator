@@ -72,4 +72,11 @@ public class MonthlyExpenditureServiceImpl implements MonthlyExpenditureService 
         System.out.printf("User %d exceeded the spending limit of %s. Total spent: %s%n",
                 userId, spendingLimit, totalSpent);
     }
+
+
+    @Override
+    public MonthlyExpenditureEntity getMonthlyExpenditure(Long userId, LocalDate month) {
+        return monthlyExpenditureRepository.findByUserIdAndMonth(userId, month);
+    }
+
 }

@@ -37,4 +37,6 @@ public class MonthlyExpenditureRepositoryImpl implements MonthlyExpenditureRepos
             return null; // Return null if no record is found
         }
     }
+
+
 }
