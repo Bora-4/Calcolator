@@ -75,8 +75,13 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ReportDTO findByReportDate(String reportDate) {
-        return reportRepository.findByReportDate(reportDate)
-                .map(ReportMapper::toDTO)
-                .orElseThrow(() -> new EntityNotFoundException("Report with date " + reportDate + " was not found."));
+        if (reportDate == null || reportDate.isEmpty()) {
+            throw new IllegalArgumentException("Report date cannot be null or empty.");
+        }
+        ReportEntity reportEntity = reportRepository.findByReportDate(reportDate);
+        if (reportEntity == null) {
+            throw new IllegalArgumentException("No report found for the given date: " + reportDate);
+        }
+        return ReportMapper.toDTO(reportEntity);
     }
 }
