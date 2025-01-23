@@ -140,14 +140,7 @@ https://github.com/user-attachments/assets/1472b789-743a-46dc-9fc9-c421c1f7c230
 
 ---
 
-## 7. Projekti i ekzekutuar
-
-
-
-
----
-
-## 8. Screenshot-et për të treguar Test Coverage
+## 7. Screenshot-et për të treguar Test Coverage
 
 **Testimi me Full Coverage për tërë klasat në paketën entity.**
 
