@@ -66,6 +66,13 @@ Tabela e menaxhimit të task-eve në Jira e gjeni në këtë link:
 1. **Register Account:** Si një vizitor, dua të regjistrohem me username, email dhe fjalëkalim për të krijuar një llogari personale.
 2. **Log In:** Si një përdorues i regjistruar, dua të logohem për të aksesuar dashboard-in tim.
 
+   
+
+https://github.com/user-attachments/assets/ce9d9e3a-f5a1-4d4e-9d40-f621e4eed089
+
+
+
+
 ### **Food Tracking**
 3. **Add Food Entry:** Si përdorues, dua të shtoj ushqime me emër, kalori dhe timestamp.
 4. **Filter Food Entries:** Si përdorues, dua të filtroj ushqimet sipas intervalit të datës.
@@ -73,13 +80,36 @@ Tabela e menaxhimit të task-eve në Jira e gjeni në këtë link:
 6. **Threshold Exceed Warning:** Si përdorues, dua të marr paralajmërime kur tejkaloj limitin ditor.
 7. **Threshold Exceed History:** Si përdorues, dua të shoh historikun e ditëve kur kam tejkaluar limitin kalorik.
 
+
+https://github.com/user-attachments/assets/daa47745-24ae-4f1c-84c7-eede7c3bfd68
+
+
+
+https://github.com/user-attachments/assets/cfd74923-f799-4dd8-9b28-e6161da11d01
+
+
+
+
 ### **Expenditure**
 8. **Track Food Spending:** Si përdorues, dua të regjistroj çmimin e ushqimeve që të monitoroj shpenzimet mujore.
 9. **Set Monthly Food Expenditure Threshold:** Si përdorues, dua të caktoj një limit shpenzimesh mujore për ushqime.
 10. **Exceed Monthly Expenditure Warning:** Si përdorues, dua të marr paralajmërime kur shpenzimet mujore tejkalojnë limitin.
 
+
+https://github.com/user-attachments/assets/3dde4af2-3627-4d85-9c5a-ca2da6f8c63a
+
+
+
+
 ### **Reports**
 11. **Weekly Summary:** Si përdorues, dua të shoh një përmbledhje javore të kalorive dhe shpenzimeve.
+ 
+
+https://github.com/user-attachments/assets/1472b789-743a-46dc-9fc9-c421c1f7c230
+
+
+    
+
 
 ### **Admin**
 12. **Create Entry (Admin):** Si admin, dua të krijoj ushqime për cilindo përdorues.
@@ -118,9 +148,37 @@ Tabela e menaxhimit të task-eve në Jira e gjeni në këtë link:
 ---
 
 ## 8. Screenshot-et për të treguar Test Coverage
+
+**Testimi me Full Coverage për tërë klasat në paketën entity.**
+
+![image](https://github.com/user-attachments/assets/025b62d8-cbae-47c7-8671-de30047124ff)
+
+
+**Testimi me Full Coverage për tërë klasat në paketën mapper.**
+
 ![Image](https://github.com/user-attachments/assets/5be64f76-63ce-41a2-8e0a-3fa630d644cd)
-Testimi me Full Coverage për tërë klasat në paketën Mapper.
 
 
+**Testimi me Full Coverage për tërë klasat në paketën repository.**
 
+![image](https://github.com/user-attachments/assets/d0f10dbb-4fc0-4969-8e7e-3df5fe7572c8)
+
+
+**Testimi me Full Coverage përë disa klasa në paketën service**
+
+![image](https://github.com/user-attachments/assets/81ca75d4-3cc0-43c1-b4f6-eecba40da70d)
+
+
+**Testimi me Full Coverafe për disa klasa në paketën controller**
+
+![image](https://github.com/user-attachments/assets/8ced5157-bf5f-43ca-92b2-0efd4913dde4)
+
+
+**TESTIMI ME FULL COVERAGE I MAIN**
+
+![image](https://github.com/user-attachments/assets/ff96ac7b-3b31-4eed-a952-8317492f46b2)
+![image](https://github.com/user-attachments/assets/a3d580b4-d890-4053-bf16-c380fd8049d5)
+![image](https://github.com/user-attachments/assets/a9d181ee-ec6f-407f-869d-9506bb1fa030)
+
+Mbi 50% coverage.
 
