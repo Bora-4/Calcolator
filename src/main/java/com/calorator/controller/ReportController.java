@@ -2,6 +2,7 @@ package com.calorator.controller;
 
 import com.calorator.dto.ReportDTO;
 import com.calorator.dto.UserDTO;
+import com.calorator.dto.WeeklyStatisticsDTO;
 import com.calorator.service.ReportService;
 import com.calorator.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -106,6 +107,16 @@ public class ReportController {
             return ResponseEntity.ok("{\"message\":\"Report deleted successfully.\"}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @GetMapping("/{reportId}/weekly-statistics")
+    public ResponseEntity<List<WeeklyStatisticsDTO>> getWeeklyStatistics(@PathVariable Long reportId) {
+        try {
+            List<WeeklyStatisticsDTO> statistics = reportService.getWeeklyStatistics(reportId);
+            return ResponseEntity.ok(statistics);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }

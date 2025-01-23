@@ -1,6 +1,7 @@
 package com.calorator.service;
 
 import com.calorator.dto.ReportDTO;
+import com.calorator.dto.WeeklyStatisticsDTO;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ReportService {
     void delete(Long id);
 
     ReportDTO findByReportDate(String reportDate);
+
+    List<WeeklyStatisticsDTO> getWeeklyStatistics(Long reportId);
 }

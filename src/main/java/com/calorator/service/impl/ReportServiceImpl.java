@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -117,4 +118,14 @@ public class ReportServiceImpl implements ReportService {
         }
         return ReportMapper.toDTO(reportEntity);
     }
+
+    @Override
+    public List<WeeklyStatisticsDTO> getWeeklyStatistics(Long reportId) {
+        List<WeeklyStatisticsDTO> allStatistics = weeklyStatisticsService.findAllWeeklyStatistics();
+        return allStatistics.stream()
+                .filter(statistic -> statistic.getReportDTO().getId().equals(reportId))
+                .collect(Collectors.toList());
+    }
+
+
 }
