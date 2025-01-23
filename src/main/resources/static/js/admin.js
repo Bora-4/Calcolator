@@ -322,6 +322,44 @@ function renderWeeklyStatistics(statistics) {
     });
 }
 
+// Fetch and display users exceeding their monthly limit
+function fetchUsersExceedingLimit() {
+    fetch('/expenditure/exceeded-limit')
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to fetch users exceeding the limit.');
+            }
+        })
+        .then(data => {
+            const tableBody = document.getElementById('exceededLimitTableBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            // Populate table with data
+            Object.entries(data).forEach(([userId, exceededAmount]) => {
+                const row = document.createElement('tr');
+
+                const userIdCell = document.createElement('td');
+                userIdCell.textContent = userId;
+
+                const exceededAmountCell = document.createElement('td');
+                exceededAmountCell.textContent = exceededAmount.toFixed(2); // Format to two decimal places
+
+                row.appendChild(userIdCell);
+                row.appendChild(exceededAmountCell);
+
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching users exceeding monthly limit. Please try again.');
+        });
+}
+
+// Automatically fetch users exceeding the limit when the page loads
+document.addEventListener('DOMContentLoaded', fetchUsersExceedingLimit);
 
 
 
