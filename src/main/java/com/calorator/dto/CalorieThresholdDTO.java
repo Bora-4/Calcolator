@@ -18,7 +18,6 @@ public class CalorieThresholdDTO {
     private Date thresholdDate;
     private int totalCalories;
     private boolean isWarningTriggered;
-    private int calorieLimit;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -62,14 +61,6 @@ public class CalorieThresholdDTO {
 
     public void setWarningTriggered(boolean warningTriggered) {
         isWarningTriggered = warningTriggered;
-    }
-
-    public int getCalorieLimit() {
-        return calorieLimit;
-    }
-
-    public void setCalorieLimit(int calorieLimit) {
-        this.calorieLimit = calorieLimit;
     }
 
     public LocalDateTime getCreatedAt() {

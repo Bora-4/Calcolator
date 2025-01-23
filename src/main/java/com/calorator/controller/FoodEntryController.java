@@ -2,7 +2,9 @@ package com.calorator.controller;
 
 
 import com.calorator.dto.FoodEntryDTO;
+import com.calorator.service.CalorieThresholdService;
 import com.calorator.service.FoodEntryService;
+import com.calorator.service.MonthlyExpenditureService;
 import com.calorator.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -10,7 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -19,10 +24,14 @@ public class FoodEntryController {
 
     private final FoodEntryService foodEntryService;
     private final UserService userService;
+    private final CalorieThresholdService calorieThresholdService;
+    private final MonthlyExpenditureService monthlyExpenditureService;
 
-    public FoodEntryController(FoodEntryService foodEntryService, UserService userService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserService userService, CalorieThresholdService calorieThresholdService, MonthlyExpenditureService monthlyExpenditureService) {
         this.foodEntryService = foodEntryService;
         this.userService = userService;
+        this.calorieThresholdService = calorieThresholdService;
+        this.monthlyExpenditureService = monthlyExpenditureService;
     }
 
     // Save a food entry
@@ -39,7 +48,9 @@ public class FoodEntryController {
             foodEntryDTO.setUser(userService.findById(effectiveUserId));
             foodEntryDTO.setEntryDate(LocalDateTime.now());
             foodEntryService.validateFoodEntry(foodEntryDTO);
+            calorieThresholdService.updateTotalCalories(effectiveUserId, foodEntryDTO.getCalories(), new Date());
             foodEntryService.save(foodEntryDTO);
+            monthlyExpenditureService.calculateMonthlySpending(effectiveUserId, LocalDate.now());
             return ResponseEntity.ok("{\"message\":\"Food entry saved successfully.\"}");
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
@@ -84,6 +95,14 @@ public class FoodEntryController {
         try {
             foodEntryDTO.setId(id);
             foodEntryService.validateFoodEntry(foodEntryDTO);
+
+            FoodEntryDTO existingEntry = foodEntryService.findById(id);
+            Long userId = existingEntry.getUser().getId();
+            int calorieDifference = foodEntryDTO.getCalories() - existingEntry.getCalories();
+            LocalDateTime localDateTime = foodEntryDTO.getEntryDate();
+            Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+            calorieThresholdService.updateTotalCalories(userId, calorieDifference, date);
+
             foodEntryService.update(foodEntryDTO);
             return ResponseEntity.ok("{\"message\":\"Food entry updated successfully.\"}");
         } catch (IllegalArgumentException | EntityNotFoundException e) {
@@ -99,7 +118,17 @@ public class FoodEntryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFoodEntry(@PathVariable Long id) {
+
+        FoodEntryDTO existingEntry = foodEntryService.findById(id);
+        Long userId = existingEntry.getUser().getId();
+        int calories = existingEntry.getCalories();
+        LocalDateTime localDateTime = existingEntry.getEntryDate();
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+
         foodEntryService.delete(id);
+
+        calorieThresholdService.updateTotalCalories(userId, -calories, date);
+
         return ResponseEntity.ok("{\"message\":\"Food entry deleted successfully.\"}");
     }
 

@@ -76,7 +76,7 @@ public class FoodEntryRepositoryImpl implements FoodEntryRepository {
     @Override
     public BigDecimal calculateMonthlySpending(Long userId, int month, int year) {
         try {
-            String sql = "SELECT COALESCE(SUM(price), 0) FROM food_entry " +
+            String sql = "SELECT COALESCE(SUM(price), 0) FROM food_entries " +
                     "WHERE user_id = :userId AND MONTH(entry_date) = :month AND YEAR(entry_date) = :year";
 
             return (BigDecimal) em.createNativeQuery(sql)

@@ -52,12 +52,6 @@ class CalorieThresholdEntityTest {
     }
 
     @Test
-    void testCalorieLimit() {
-        calorieThresholdEntity.setCalorieLimit(2500);
-        assertEquals(2500, calorieThresholdEntity.getCalorieLimit());
-    }
-
-    @Test
     void testCreatedAt() {
         LocalDateTime now = LocalDateTime.now();
         calorieThresholdEntity.setCreatedAt(now);

@@ -19,7 +19,6 @@ class CalorieThresholdMapperTest {
         calorieThresholdDTO.setThresholdDate(new Date());
         calorieThresholdDTO.setTotalCalories(2500);
         calorieThresholdDTO.setWarningTriggered(true);
-        calorieThresholdDTO.setCalorieLimit(2000);
         calorieThresholdDTO.setCreatedAt(LocalDateTime.of(2025, 1, 22, 14, 50));
         calorieThresholdDTO.setUpdatedAt(LocalDateTime.of(2025, 1, 22, 14, 50));
 
@@ -35,7 +34,6 @@ class CalorieThresholdMapperTest {
         assertEquals(calorieThresholdDTO.getThresholdDate(), calorieThreshold.getThresholdDate());
         assertEquals(calorieThresholdDTO.getTotalCalories(), calorieThreshold.getTotalCalories());
         assertEquals(calorieThresholdDTO.isWarningTriggered(), calorieThreshold.isWarningTriggered());
-        assertEquals(calorieThresholdDTO.getCalorieLimit(), calorieThreshold.getCalorieLimit());
         assertEquals(calorieThresholdDTO.getCreatedAt(), calorieThreshold.getCreatedAt());
         assertEquals(calorieThresholdDTO.getUpdatedAt(), calorieThreshold.getUpdatedAt());
         assertEquals(user, calorieThreshold.getUser());
@@ -68,7 +66,6 @@ class CalorieThresholdMapperTest {
         calorieThreshold.setUser(user);
         calorieThreshold.setTotalCalories(2500);
         calorieThreshold.setWarningTriggered(true);
-        calorieThreshold.setCalorieLimit(2000);
         calorieThreshold.setCreatedAt(LocalDateTime.of(2025, 1, 22, 14, 50));
         calorieThreshold.setUpdatedAt(LocalDateTime.of(2025, 1, 22, 14, 50));
 
@@ -78,7 +75,6 @@ class CalorieThresholdMapperTest {
         assertEquals(calorieThresholdDTO.getThresholdDate(), calorieThreshold.getThresholdDate());
         assertEquals(calorieThresholdDTO.getTotalCalories(), calorieThreshold.getTotalCalories());
         assertEquals(calorieThresholdDTO.isWarningTriggered(), calorieThreshold.isWarningTriggered());
-        assertEquals(calorieThresholdDTO.getCalorieLimit(), calorieThreshold.getCalorieLimit());
         assertEquals(calorieThresholdDTO.getCreatedAt(), calorieThreshold.getCreatedAt());
         assertEquals(calorieThresholdDTO.getUpdatedAt(), calorieThreshold.getUpdatedAt());
         assertNotNull(calorieThresholdDTO.getUser());

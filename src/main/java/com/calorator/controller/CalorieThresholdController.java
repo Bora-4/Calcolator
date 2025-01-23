@@ -35,8 +35,9 @@ public class CalorieThresholdController {
         calorieThresholdService.updateTotalCalories(userId, calories, date);
     }
 
-    @GetMapping("/{date}/exceeded")
-    public boolean isThresholdExceeded(@PathVariable Date date, HttpSession session) {
+    @GetMapping("/{dateInMillis}/exceeded")
+    public boolean isThresholdExceeded(@PathVariable long dateInMillis, HttpSession session) {
+        Date date = new Date(dateInMillis);
         Long userId = (Long) session.getAttribute("userId");
         return calorieThresholdService.isThresholdExceeded(userId, date);
     }
