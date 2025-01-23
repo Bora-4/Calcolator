@@ -117,6 +117,15 @@ https://github.com/user-attachments/assets/1472b789-743a-46dc-9fc9-c421c1f7c230
 14. **Delete Entry (Admin):** Si admin, dua të fshij ushqimet e përdoruesve.
 15. **System Reports (Admin):** Si admin, dua të shoh statistika mbi sistemin.
 
+
+https://github.com/user-attachments/assets/e9ee065d-e6bd-4358-a4ab-0857c2f023db
+
+
+https://github.com/user-attachments/assets/103bd9e1-1db5-44b1-892f-ea66bc473ea6
+
+
+
+
 ---
 
 ## 5. Sprint Planning
