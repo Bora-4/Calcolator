@@ -1,9 +1,11 @@
 package com.calorator.repository;
 
 import com.calorator.entity.WeeklyStatisticsEntity;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Repository
 public interface WeeklyStatisticsRepository {
 
     void save(WeeklyStatisticsEntity weeklyStatisticsEntity);
@@ -16,5 +18,5 @@ public interface WeeklyStatisticsRepository {
 
     void delete(Long id);
 
-    Optional<WeeklyStatisticsEntity> findByStatisticName(String statisticName);
+    WeeklyStatisticsEntity findByStatisticName(String statisticName);
 }

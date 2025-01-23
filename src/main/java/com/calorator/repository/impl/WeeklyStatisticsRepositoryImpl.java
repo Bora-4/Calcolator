@@ -1,5 +1,6 @@
 package com.calorator.repository.impl;
 
+import com.calorator.entity.ReportEntity;
 import com.calorator.entity.WeeklyStatisticsEntity;
 import com.calorator.repository.WeeklyStatisticsRepository;
 import jakarta.persistence.EntityManager;
@@ -11,11 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class WeeklyStatisticsRepositoryImpl implements WeeklyStatisticsRepository {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    public EntityManager entityManager;
 
     @Override
     public void save(WeeklyStatisticsEntity weeklyStatisticsEntity) {
@@ -47,11 +47,13 @@ public class WeeklyStatisticsRepositoryImpl implements WeeklyStatisticsRepositor
     }
 
     @Override
-    public Optional<WeeklyStatisticsEntity> findByStatisticName(String statisticName) {
-        return entityManager.createQuery("SELECT w FROM WeeklyStatisticsEntity w WHERE w.statisticName = :statisticName", WeeklyStatisticsEntity.class)
-                .setParameter("statisticName", statisticName)
-                .getResultList()
-                .stream()
-                .findFirst();
+    public WeeklyStatisticsEntity findByStatisticName(String statisticName) {
+        try {
+            return entityManager.createQuery("SELECT statistic FROM WeeklyStatisticsEntity  statistic WHERE statistic.statisticName = :statisticName", WeeklyStatisticsEntity.class)
+                    .setParameter("statisticName", statisticName)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
