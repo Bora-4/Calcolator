@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/expenditure")
@@ -64,6 +65,16 @@ public class MonthlyExpenditureController {
         }
 
         return ResponseEntity.ok(expenditure);
+    }
+
+    @GetMapping("/exceeded-limit")
+    public ResponseEntity<Map<Long, BigDecimal>> getUsersExceedingLimit() {
+        try {
+            Map<Long, BigDecimal> usersExceedingLimit = monthlyExpenditureService.findUsersExceedingLimitForPreviousMonth();
+            return ResponseEntity.ok(usersExceedingLimit);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
 }

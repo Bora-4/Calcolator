@@ -1,11 +1,17 @@
 package com.calorator.controller;
 
 import com.calorator.dto.ReportDTO;
+import com.calorator.dto.UserDTO;
+import com.calorator.dto.WeeklyStatisticsDTO;
 import com.calorator.service.ReportService;
+import com.calorator.service.UserService;
+import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -13,20 +19,37 @@ import java.util.List;
 public class ReportController {
 
     private final ReportService reportService;
+    private final UserService userService;
 
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, UserService userService) {
         this.reportService = reportService;
+        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<String> createReport(@RequestBody ReportDTO reportDTO) {
+    public ResponseEntity<String> createReport(HttpSession session) {
         try {
-            reportService.save(reportDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\":\"Report created successfully.\"}");
+            Long userId = (Long) session.getAttribute("userId");
+
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"message\":\"User not logged in.\"}");
+            }
+
+            UserDTO admin = userService.findById(userId);
+            ReportDTO reportDTO = new ReportDTO();
+            reportDTO.setAdmin(admin);
+            reportDTO.setReportDate(LocalDate.now());
+
+            ReportDTO savedReport = reportService.save(reportDTO);
+            Long reportId = savedReport.getId();
+            String responseBody = String.format("{\"message\":\"Report created successfully.\", \"reportId\":%d}", reportId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }
     }
+
+
 
     @PutMapping
     public ResponseEntity<String> updateReport(@RequestBody ReportDTO reportDTO) {
@@ -86,6 +109,16 @@ public class ReportController {
             return ResponseEntity.ok("{\"message\":\"Report deleted successfully.\"}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @GetMapping("/{reportId}/weekly-statistics")
+    public ResponseEntity<List<WeeklyStatisticsDTO>> getWeeklyStatistics(@PathVariable Long reportId) {
+        try {
+            List<WeeklyStatisticsDTO> statistics = reportService.getWeeklyStatistics(reportId);
+            return ResponseEntity.ok(statistics);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }
