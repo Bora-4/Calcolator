@@ -86,7 +86,7 @@ public class FoodEntryController {
 
     @GetMapping("/last-7-days/count")
     public ResponseEntity<Long> getLast7DaysEntriesCount() {
-        Long count = foodEntryService.countFoodEntriesLast7Days();
+        Long count = (long) foodEntryService.countFoodEntriesLast7Days();
         return ResponseEntity.ok(count);
     }
 

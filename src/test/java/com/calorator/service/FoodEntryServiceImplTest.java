@@ -317,7 +317,7 @@ public class FoodEntryServiceImplTest {
     void testCountFoodEntriesLast7Days_Empty() {
         when(foodEntryRepository.countFoodEntriesLast7Days()).thenReturn(0L);
 
-        Long result = foodEntryService.countFoodEntriesLast7Days();
+        Long result = (long) foodEntryService.countFoodEntriesLast7Days();
 
         assertEquals(0L, result);
     }

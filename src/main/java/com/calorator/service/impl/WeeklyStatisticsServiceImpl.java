@@ -1,7 +1,6 @@
 package com.calorator.service.impl;
 
 import com.calorator.dto.WeeklyStatisticsDTO;
-import com.calorator.dto.ReportDTO;
 import com.calorator.dto.UserDTO;
 import com.calorator.entity.WeeklyStatisticsEntity;
 import com.calorator.entity.ReportEntity;
@@ -10,22 +9,25 @@ import com.calorator.mapper.WeeklyStatisticsMapper;
 import com.calorator.mapper.ReportMapper;
 import com.calorator.mapper.UserMapper;
 import com.calorator.repository.WeeklyStatisticsRepository;
+import com.calorator.service.FoodEntryService;
 import com.calorator.service.WeeklyStatisticsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class WeeklyStatisticsServiceImpl implements WeeklyStatisticsService {
 
     private final WeeklyStatisticsRepository weeklyStatisticsRepository;
+    private final FoodEntryService foodEntryService;
 
     @Autowired
-    public WeeklyStatisticsServiceImpl(WeeklyStatisticsRepository weeklyStatisticsRepository) {
+    public WeeklyStatisticsServiceImpl(WeeklyStatisticsRepository weeklyStatisticsRepository, FoodEntryService foodEntryService) {
         this.weeklyStatisticsRepository = weeklyStatisticsRepository;
+        this.foodEntryService = foodEntryService;
     }
 
     @Override
@@ -34,6 +36,7 @@ public class WeeklyStatisticsServiceImpl implements WeeklyStatisticsService {
         UserEntity userEntity = UserMapper.toEntity(userDTO);
         ReportEntity reportEntity = ReportMapper.toEntity(weeklyStatisticsDTO.getReportDTO(), userEntity);
         WeeklyStatisticsEntity entity = WeeklyStatisticsMapper.toEntity(weeklyStatisticsDTO, reportEntity);
+
         weeklyStatisticsRepository.save(entity);
     }
 

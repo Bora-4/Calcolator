@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -67,8 +68,8 @@ public class FoodEntryServiceImpl implements FoodEntryService {
     }
 
     @Override
-    public Long countFoodEntriesLast7Days() {
-        return foodEntryRepository.countFoodEntriesLast7Days();
+    public int countFoodEntriesLast7Days() {
+        return Math.toIntExact(foodEntryRepository.countFoodEntriesLast7Days());
     }
 
     @Override
@@ -126,6 +127,21 @@ public class FoodEntryServiceImpl implements FoodEntryService {
         return foodEntries.stream()
                 .map(FoodEntryMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public int calculateAverageCaloriesPerUserLast7Days(Long id) {
+        List<FoodEntryEntity> entries = foodEntryRepository.findFoodEntriesLast7Days(id);
+        if (entries.isEmpty()) {
+            return 0;
+        }
+
+        OptionalDouble totalCalories = entries.stream()
+                .mapToInt(FoodEntryEntity::getCalories)
+                .average();
+
+        return totalCalories.isPresent() ? (int) totalCalories.getAsDouble() : 0;
+
     }
 
     @Override
