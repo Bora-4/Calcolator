@@ -74,11 +74,11 @@ public class CalorieThresholdControllerTest {
 
     @Test
     public void testIsThresholdExceeded() {
-
-        Date date = new Date();
+        long dateInMillis = System.currentTimeMillis();
+        Date date = new Date(dateInMillis);
         when(calorieThresholdService.isThresholdExceeded(userId, date)).thenReturn(true);
 
-        boolean isExceeded = calorieThresholdController.isThresholdExceeded(date, session);
+        boolean isExceeded = calorieThresholdController.isThresholdExceeded(dateInMillis, session);
 
         assertTrue(isExceeded);
         verify(calorieThresholdService, times(1)).isThresholdExceeded(userId, date);
