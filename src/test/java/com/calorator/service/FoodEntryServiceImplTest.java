@@ -111,7 +111,7 @@ class FoodEntryServiceImplTest {
     void countFoodEntriesLast7Days_shouldReturnCount() {
         when(foodEntryRepository.countFoodEntriesLast7Days()).thenReturn(5L);
 
-        Long count = foodEntryService.countFoodEntriesLast7Days();
+        Long count = Long.valueOf(foodEntryService.countFoodEntriesLast7Days());
 
         assertEquals(5L, count);
     }
@@ -194,15 +194,21 @@ class FoodEntryServiceImplTest {
 
     @Test
     void entryDateFiltering_validInputs_shouldReturnEntries() {
+
         FoodEntryEntity foodEntryEntity = new FoodEntryEntity();
         foodEntryEntity.setId(1L);
 
-        when(foodEntryRepository.entryDateFiltering(1L, LocalDateTime.now().minusDays(7), LocalDateTime.now()))
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneWeekAgo = now.minusDays(7);
+
+        when(foodEntryRepository.entryDateFiltering(1L, oneWeekAgo, now))
                 .thenReturn(Collections.singletonList(foodEntryEntity));
 
-        List<FoodEntryDTO> result = foodEntryService.entryDateFiltering(1L, LocalDateTime.now().minusDays(7), LocalDateTime.now());
+
+        List<FoodEntryDTO> result = foodEntryService.entryDateFiltering(1L, oneWeekAgo, now);
 
         assertNotNull(result);
         assertEquals(1, result.size());
     }
+
 }
