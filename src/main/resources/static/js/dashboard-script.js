@@ -17,6 +17,7 @@ function navigateToAddFoodEntry() {
 }
 
 function logout() {
+    sessionStorage.clear();
     fetch('/logout', {
         method: 'GET'
     })
@@ -248,6 +249,22 @@ function updateOverview(data) {
 document.addEventListener("DOMContentLoaded", () => {
     fetchTodayEntries();
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    fetchTodayEntries();
+
+    // Check if the weekly summary modal has been shown already
+    if (!sessionStorage.getItem('weeklySummaryShown')) {
+        // Mark it as shown in localStorage
+        sessionStorage.setItem('weeklySummaryShown', 'true');
+
+
+        // Fetch the weekly summary and display it
+        last7DaysEntries();
+    }
+});
+
 
 function last7DaysEntries() {
     showMessage("Loading...");
