@@ -40,8 +40,10 @@ public class ReportController {
             reportDTO.setAdmin(admin);
             reportDTO.setReportDate(LocalDate.now());
 
-            reportService.save(reportDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("{\"message\":\"Report created successfully.\"}");
+            ReportDTO savedReport = reportService.save(reportDTO);
+            Long reportId = savedReport.getId();
+            String responseBody = String.format("{\"message\":\"Report created successfully.\", \"reportId\":%d}", reportId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\":\"" + e.getMessage() + "\"}");
         }

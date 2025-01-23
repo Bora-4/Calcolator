@@ -6,27 +6,27 @@ let allUsers = [];
 
 // Fetch all users and populate the user list
 document.addEventListener("DOMContentLoaded", () => {
-    fetchUsers(); // Fetch all users on page load
+    fetchUsers();
 });
 
 // Fetch users (either all or filtered by search term)
 async function fetchUsers(searchTerm = '') {
     try {
-        const url = searchTerm ? `/users?search=${searchTerm}` : '/users'; // Modify this if you have a search endpoint
+        const url = searchTerm ? `/users?search=${searchTerm}` : '/users';
         const response = await fetch(url);
         const users = await response.json();
 
-        allUsers = users; // Save all users for later filtering
-        renderUserList(users); // Render the user list
+        allUsers = users;
+        renderUserList(users);
 
     } catch (error) {
         console.error('Error fetching users:', error);
     }
 }
 
-// Render the user list in the UI
+
 function renderUserList(users) {
-    userList.innerHTML = ''; // Clear the existing user list
+    userList.innerHTML = '';
 
     users.forEach(user => {
         const listItem = document.createElement('li');
@@ -35,12 +35,12 @@ function renderUserList(users) {
             <td>${user.name}</td>
             <td>${user.email}</td>
             <td><button class="choose-btn" data-user-id="${user.id}">Choose</button></td>
-        `; // Display user name and email
+        `;
         const chooseButton = listItem.querySelector('.choose-btn');
         chooseButton.addEventListener('click', () => {
             selectedUserId = user.id;
             console.log('User selected:', selectedUserId);
-            fetchUserFoodEntries(selectedUserId); // Fetch food entries for the selected user
+            fetchUserFoodEntries(selectedUserId);
         });
         userList.appendChild(listItem);
     });
@@ -49,14 +49,14 @@ function renderUserList(users) {
 
 // Handle the search input to filter users
 searchInput.addEventListener('input', () => {
-    const searchTerm = searchInput.value.trim();  // Get the search term
-    console.log("Searching for:", searchTerm); // Log search term for debugging
+    const searchTerm = searchInput.value.trim();
+    console.log("Searching for:", searchTerm);
     if (searchTerm === '') {
-        renderUserList(allUsers); // If search is empty, render all users
+        renderUserList(allUsers);
     } else {
         const filteredUsers = allUsers.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
-        console.log("Filtered users:", filteredUsers); // Log filtered users for debugging
-        renderUserList(filteredUsers); // Render the filtered list
+        console.log("Filtered users:", filteredUsers);
+        renderUserList(filteredUsers);
     }
 });
 
@@ -64,17 +64,17 @@ searchInput.addEventListener('input', () => {
 // Fetch food entries for the selected user for the current day
 async function fetchUserFoodEntries(userId) {
 
-    console.log("Fetching food entries for user:", userId); // Log user ID for debugging
+    console.log("Fetching food entries for user:", userId);
 
     try {
 
-        // Send request to backend to fetch food entries for today
+
         const response = await fetch(`/food-entries`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
-            //credentials: 'include' // Make sure the session is maintained (logged in user)
+
         });
 
         if (!response.ok) {
@@ -83,12 +83,12 @@ async function fetchUserFoodEntries(userId) {
 
         // Parse the response data
         const entries = await response.json();
-        console.log("Food entries:", entries); // Log entries for debugging
+        console.log("Food entries:", entries);
 
         if (entries && entries.length > 0) {
-            foodEntries.length = 0; // Clear the existing entries
-            foodEntries.push(...entries); // Add new entries
-            renderFoodTable(); // Render the food entries table
+            foodEntries.length = 0;
+            foodEntries.push(...entries);
+            renderFoodTable();
         } else {
             alert('No food entries found for today.');
         }
@@ -100,10 +100,10 @@ async function fetchUserFoodEntries(userId) {
 // Render the food entries table
 function renderFoodTable() {
     const tableBody = document.getElementById('foodTableBody');
-    tableBody.innerHTML = ''; // Clear the existing table body
+    tableBody.innerHTML = '';
 
-    console.log("Rendering table with food entries:", foodEntries);  // Debug log
-    console.log("Selected user ID:", selectedUserId);  // Debug log
+    console.log("Rendering table with food entries:", foodEntries);
+    console.log("Selected user ID:", selectedUserId);
 
     if (foodEntries.length === 0) {
         const row = document.createElement('tr');
@@ -133,7 +133,7 @@ function renderFoodTable() {
 }
 
 
-// Other functions like addNewFoodEntry, editFoodEntry, deleteFoodEntry, and logout remain the same
+
 
 
 async function addNewFoodEntry() {
@@ -152,14 +152,14 @@ async function addNewFoodEntry() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json' // Optional, but helpful for JSON responses
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     foodName,
                     calories,
                     price
                 }),
-                credentials: 'include', // Ensures cookies are sent with the request
+                credentials: 'include',
             });
 
             if (response.ok) {
@@ -186,7 +186,7 @@ async function editFoodEntry(index) {
     const foodName = prompt('Enter food name:', entry.name);
     const calories = parseInt(prompt('Enter calories:', entry.calories), 10);
     const price = parseFloat(prompt('Enter price:', entry.price));
-    const entryDate = entry.entryDate ? entry.entryDate : new Date().toISOString();  // Use the existing date or current date as fallback
+    const entryDate = entry.entryDate ? entry.entryDate : new Date().toISOString();
 
     const userId = entry.user ? entry.user.id : null;
 
@@ -198,7 +198,7 @@ async function editFoodEntry(index) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: entry.id, // Ensure the ID is passed correctly
+                    id: entry.id,
                     foodName: foodName,
                     calories: calories,
                     price: price,
@@ -207,13 +207,13 @@ async function editFoodEntry(index) {
                 }),
             });
 
-            // Check if the response is ok and log it
-            const responseData = await response.json();  // Assuming the API sends a JSON response
+
+            const responseData = await response.json();
             console.log('Response:', responseData);
 
             if (response.ok) {
                 foodEntries[index] = {id: entry.id, foodName, calories, price, entryDate, user: {id: userId}};
-                console.log('Updated foodEntries:', foodEntries);  // Log the updated foodEntries array
+                console.log('Updated foodEntries:', foodEntries);
                 renderFoodTable();
                 alert('Food entry updated successfully!');
             } else {
@@ -260,6 +260,7 @@ logoutBtn.addEventListener('click', async () => {
     }
 });
 
+
 function generateReport() {
     event.preventDefault();
 
@@ -269,22 +270,64 @@ function generateReport() {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return response.json().then(errorData => {
-                    throw new Error(errorData.message || "An error occurred.");
-                });
-            }
-        })
+        .then(response => response.json())
         .then(data => {
-            alert(data.message);
+            if (data.message === "Report created successfully.") {
+                alert(data.message);
+                if (!data.reportId) {
+                    console.error('Report ID is missing in response:', data);
+                    alert('An error occurred: Report ID is missing.');
+                }
+                const reportId = data.reportId;
+
+
+                fetchWeeklyStatistics(reportId);
+            } else {
+                alert("Error: " + data.message);
+            }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert(error.message);
+            alert('An error occurred while generating the report.');
         });
 }
+
+async function fetchWeeklyStatistics(reportId) {
+    try {
+        const response = await fetch(`/reports/${reportId}/weekly-statistics`);
+        const statistics = await response.json();
+
+        if (statistics && statistics.length > 0) {
+            renderWeeklyStatistics(statistics);
+        } else {
+            alert('No weekly statistics found.');
+        }
+    } catch (error) {
+        console.error('Error fetching weekly statistics:', error);
+        alert('Failed to fetch weekly statistics.');
+    }
+}
+
+function renderWeeklyStatistics(statistics) {
+    const statisticsList = document.getElementById('weeklyStatisticsList');
+    statisticsList.innerHTML = ''; // Clear the existing list
+
+    statistics.forEach(stat => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <p><strong>Statistic Name:</strong> ${stat.statisticName}</p>
+            <p><strong>Statistic Value:</strong> ${stat.statisticValue}</p>
+        `;
+        statisticsList.appendChild(listItem);
+    });
+}
+
+
+
+
+
+
+
+
 
 

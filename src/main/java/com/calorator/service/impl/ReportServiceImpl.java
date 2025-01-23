@@ -37,7 +37,7 @@ public class ReportServiceImpl implements ReportService {
         this.userService = userService;
     }
     @Override
-    public void save(ReportDTO reportDTO) {
+    public ReportDTO save(ReportDTO reportDTO) {
         UserDTO admin = reportDTO.getAdmin();
         UserEntity adminEntity = null;
         if (admin != null) {
@@ -67,6 +67,7 @@ public class ReportServiceImpl implements ReportService {
             weekCalories.setStatisticValue(foodEntryService.calculateAverageCaloriesPerUserLast7Days(user.getId()));
             weeklyStatisticsService.saveWeeklyStatistics(weekCalories);
         }
+        return savedReportDTO;
     }
 
 

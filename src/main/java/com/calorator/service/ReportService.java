@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReportService {
 
-    void save(ReportDTO reportDTO);
+    ReportDTO save(ReportDTO reportDTO);
 
     ReportDTO findById(Long id);
 

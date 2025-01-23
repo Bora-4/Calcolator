@@ -26,7 +26,7 @@
     </div>
 
     <div class="user-list">
-<!--      <p><span id="userCount">230</span> Users</p>-->
+
       <ul id="userList">
         <thead>
         <tr>
@@ -67,17 +67,18 @@
 
   <!-- Reports Section -->
   <section id="reports" class="reports">
-    <h2>Reports</h2>
-    <div class="report">
-      <p><span class="highlight">Entries last 7 days:</span> <span id="last7Days">0</span></p>
-      <p><span class="highlight">Average calories per user (last 7 days):</span> <span id="avgCalories">0</span></p>
-      <p><span class="highlight">Users exceeding monthly price limit (last month):</span></p>
-      <ul id="exceedingUsers">
-        <!-- Dynamic list will be added here -->
-      </ul>
-    </div>
+    <h2>Weekly reports</h2>
     <button onclick="generateReport()">Generate Report</button>
   </section>
+  <section id="weekly-statistics" class="weekly-statistics">
+    <h3>Weekly Statistics</h3>
+    <ul id="weeklyStatisticsList">
+      <!-- Dynamic weekly statistics will be added here -->
+    </ul>
+  </section>
+
+
+
 </div>
 <script src="../static/js/admin.js"></script>
 
