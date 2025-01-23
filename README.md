@@ -171,7 +171,7 @@ https://github.com/user-attachments/assets/103bd9e1-1db5-44b1-892f-ea66bc473ea6
 ![image](https://github.com/user-attachments/assets/81ca75d4-3cc0-43c1-b4f6-eecba40da70d)
 
 
-**Testimi me Full Coverafe për disa klasa në paketën controller**
+**Testimi me Full Coverage për disa klasa në paketën controller**
 
 ![image](https://github.com/user-attachments/assets/8ced5157-bf5f-43ca-92b2-0efd4913dde4)
 
