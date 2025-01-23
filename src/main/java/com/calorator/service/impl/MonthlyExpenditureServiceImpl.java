@@ -68,15 +68,17 @@ public class MonthlyExpenditureServiceImpl implements MonthlyExpenditureService 
     }
 
 
-    private void sendThresholdNotification(Long userId, BigDecimal totalSpent, BigDecimal spendingLimit) {
+    public void sendThresholdNotification(Long userId, BigDecimal totalSpent, BigDecimal spendingLimit) {
         System.out.printf("User %d exceeded the spending limit of %s. Total spent: %s%n",
                 userId, spendingLimit, totalSpent);
     }
 
 
     @Override
-    public MonthlyExpenditureEntity getMonthlyExpenditure(Long userId, LocalDate month) {
-        return monthlyExpenditureRepository.findByUserIdAndMonth(userId, month);
+    public BigDecimal getMonthlyExpenditure(Long userId, LocalDate month) {
+        System.out.println("Calculating expenditure for UserId: " + userId + ", Month: " + month.getMonthValue() + ", Year: " + month.getYear());
+        return monthlyExpenditureRepository.calculateMonthlySpending(userId, month.getMonthValue(), month.getYear());
     }
+
 
 }

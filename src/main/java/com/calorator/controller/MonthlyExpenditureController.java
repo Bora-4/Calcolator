@@ -1,9 +1,7 @@
 package com.calorator.controller;
 
-import com.calorator.dto.MonthlyExpenditureDTO;
-import com.calorator.entity.MonthlyExpenditureEntity;
-import com.calorator.mapper.MonthlyExpenditureMapper;
 import com.calorator.service.MonthlyExpenditureService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,23 +46,24 @@ public class MonthlyExpenditureController {
                     .body("Invalid custom limit: " + e.getMessage());
         }
     }
-
     @GetMapping("/get-Monthly-Expenditure")
-    public ResponseEntity<MonthlyExpenditureDTO> getMonthlyExpenditure(@RequestParam Long userId, @RequestParam String month) {
-        try {
-            LocalDate monthDate = LocalDate.parse(month + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            var expenditure = monthlyExpenditureService.getMonthlyExpenditure(userId, monthDate);
+    public ResponseEntity<BigDecimal> getMonthlyExpenditure(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        LocalDate monthDate = LocalDate.now();
+        System.out.println("UserId: " + userId + ", Date: " + monthDate);
 
-            if (expenditure == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
-            MonthlyExpenditureDTO expenditureDTO = MonthlyExpenditureMapper.toDTO(expenditure);
-            return ResponseEntity.ok(expenditureDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
-    }
 
+        var expenditure = monthlyExpenditureService.getMonthlyExpenditure(userId, monthDate);
+        System.out.println("Expenditure: " + expenditure);
+
+        if (expenditure == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.ok(expenditure);
+    }
 
 }

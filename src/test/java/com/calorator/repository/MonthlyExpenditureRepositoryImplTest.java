@@ -4,6 +4,7 @@ import com.calorator.entity.MonthlyExpenditureEntity;
 import com.calorator.entity.UserEntity;
 import com.calorator.repository.impl.MonthlyExpenditureRepositoryImpl;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,6 +104,83 @@ class MonthlyExpenditureRepositoryImplTest {
         verify(em, times(1)).createQuery(anyString(), eq(MonthlyExpenditureEntity.class));
         verify(query, times(1)).setParameter("userId", userId);
         verify(query, times(1)).setParameter("month", month);
+        verify(query, times(1)).getSingleResult();
+    }
+
+    @Test
+    void testCalculateMonthlySpending() {
+        Long userId = 1L;
+        int month = 1;
+        int year = 2025;
+        BigDecimal expectedTotal = BigDecimal.valueOf(500);
+
+        Query nativeQuery = mock(Query.class);
+
+        when(em.createNativeQuery(anyString())).thenReturn(nativeQuery);
+        when(nativeQuery.setParameter("userId", userId)).thenReturn(nativeQuery);
+        when(nativeQuery.setParameter("month", month)).thenReturn(nativeQuery);
+        when(nativeQuery.setParameter("year", year)).thenReturn(nativeQuery);
+        when(nativeQuery.getSingleResult()).thenReturn(expectedTotal);
+
+        BigDecimal result = repository.calculateMonthlySpending(userId, month, year);
+
+        assertNotNull(result);
+        assertEquals(expectedTotal, result);
+
+        verify(em, times(1)).createNativeQuery(anyString());
+        verify(nativeQuery, times(1)).setParameter("userId", userId);
+        verify(nativeQuery, times(1)).setParameter("month", month);
+        verify(nativeQuery, times(1)).setParameter("year", year);
+        verify(nativeQuery, times(1)).getSingleResult();
+    }
+    @Test
+    void testCalculateMonthlySpending_NoExpenditure() {
+        Long userId = 1L;
+        int month = 1;
+        int year = 2025;
+        BigDecimal expectedTotal = BigDecimal.ZERO;
+
+        Query nativeQuery = mock(Query.class);
+
+        when(em.createNativeQuery(anyString())).thenReturn(nativeQuery);
+        when(nativeQuery.setParameter("userId", userId)).thenReturn(nativeQuery);
+        when(nativeQuery.setParameter("month", month)).thenReturn(nativeQuery);
+        when(nativeQuery.setParameter("year", year)).thenReturn(nativeQuery);
+        when(nativeQuery.getSingleResult()).thenReturn(expectedTotal);
+
+        BigDecimal result = repository.calculateMonthlySpending(userId, month, year);
+
+        assertNotNull(result);
+        assertEquals(expectedTotal, result);
+
+        verify(em, times(1)).createNativeQuery(anyString());
+        verify(nativeQuery, times(1)).setParameter("userId", userId);
+        verify(nativeQuery, times(1)).setParameter("month", month);
+        verify(nativeQuery, times(1)).setParameter("year", year);
+        verify(nativeQuery, times(1)).getSingleResult();
+    }
+
+    @Test
+    void testCalculateMonthlySpending_Exception() {
+        Long userId = 1L;
+        int month = 1;
+        int year = 2025;
+
+        when(em.createNativeQuery(anyString())).thenReturn(query);
+        when(query.setParameter("userId", userId)).thenReturn(query);
+        when(query.setParameter("month", month)).thenReturn(query);
+        when(query.setParameter("year", year)).thenReturn(query);
+        when(query.getSingleResult()).thenThrow(new RuntimeException("Database error"));
+
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                repository.calculateMonthlySpending(userId, month, year));
+
+        assertEquals("An error occurred while calculating monthly spending.", exception.getMessage());
+
+        verify(em, times(1)).createNativeQuery(anyString());
+        verify(query, times(1)).setParameter("userId", userId);
+        verify(query, times(1)).setParameter("month", month);
+        verify(query, times(1)).setParameter("year", year);
         verify(query, times(1)).getSingleResult();
     }
 }
