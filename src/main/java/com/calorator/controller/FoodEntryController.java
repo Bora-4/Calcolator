@@ -4,6 +4,7 @@ package com.calorator.controller;
 import com.calorator.dto.FoodEntryDTO;
 import com.calorator.service.CalorieThresholdService;
 import com.calorator.service.FoodEntryService;
+import com.calorator.service.MonthlyExpenditureService;
 import com.calorator.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -23,11 +25,13 @@ public class FoodEntryController {
     private final FoodEntryService foodEntryService;
     private final UserService userService;
     private final CalorieThresholdService calorieThresholdService;
+    private final MonthlyExpenditureService monthlyExpenditureService;
 
-    public FoodEntryController(FoodEntryService foodEntryService, UserService userService, CalorieThresholdService calorieThresholdService) {
+    public FoodEntryController(FoodEntryService foodEntryService, UserService userService, CalorieThresholdService calorieThresholdService, MonthlyExpenditureService monthlyExpenditureService) {
         this.foodEntryService = foodEntryService;
         this.userService = userService;
         this.calorieThresholdService = calorieThresholdService;
+        this.monthlyExpenditureService = monthlyExpenditureService;
     }
 
     // Save a food entry
@@ -46,6 +50,7 @@ public class FoodEntryController {
             foodEntryService.validateFoodEntry(foodEntryDTO);
             calorieThresholdService.updateTotalCalories(effectiveUserId, foodEntryDTO.getCalories(), new Date());
             foodEntryService.save(foodEntryDTO);
+            monthlyExpenditureService.calculateMonthlySpending(effectiveUserId, LocalDate.now());
             return ResponseEntity.ok("{\"message\":\"Food entry saved successfully.\"}");
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("{\"message\":\"" + e.getMessage() + "\"}");
