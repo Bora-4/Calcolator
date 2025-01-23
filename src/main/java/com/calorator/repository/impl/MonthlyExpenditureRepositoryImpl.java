@@ -34,7 +34,7 @@ public class MonthlyExpenditureRepositoryImpl implements MonthlyExpenditureRepos
                     .setParameter("month", month)
                     .getSingleResult();
         } catch (Exception e) {
-            return null; // Return null if no record is found
+            return null;
         }
     }
 
